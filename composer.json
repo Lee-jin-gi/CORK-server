@@ -1,0 +1,19 @@
+{
+    "name": "classprep/cork",
+    "description": "cork",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "dvmoomoodv",
+            "email": "dvmoomoodv@gmail.com"
+        }
+    ],
+    "require": {
+  		"php": ">=5.2.4"
+  	},
+  	"require-dev": {
+      "phpunit/phpunit": "5.*",
+  		"mikey179/vfsStream": "1.1.*"
+  	}
+}
