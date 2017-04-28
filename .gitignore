@@ -1,2 +1,2 @@
-/vendor/
-!/vendor/codeignitor
+vendor/
+!vendor/codeigniter
