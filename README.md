@@ -7,7 +7,7 @@
 Constitution of Republic of Korea
 
 
- 자체생성은 md.  직접 생성한것은 .markdow
+ 자체생성은 md.  직접 생성한것은 .markdown
 
 
 codeigniter 폴더안에 생성  
