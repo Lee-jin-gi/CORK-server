@@ -8,49 +8,71 @@
 
 
   <p>
-    <strong>title</strong>
+    <strong>Board List</strong>
     <br>
-    <?php print_r($test_info); ?>
+    <!-- <?php print_r($test_info); ?> -->
+    <?php print_r($board_list); ?>
   </p>
   <hr>
 
 
   <p>
-    <strong>title</strong>
+    <strong>Login Info</strong>
     <br>
-    <?php print_r($array); ?>
+    <?php print_r($login_user_info); ?>
   </p>
   <hr>
 
 
   <p>
-    <strong>title</strong>
+    <strong>Board Reply List (reg_id=-1)</strong>
     <br>
-    <?php print_r($array); ?>
+    <?php print_r($board_reply_list); ?>
   </p>
   <hr>
 
 
   <p>
-    <strong>title</strong>
+    <strong>Super Admin List</strong>
     <br>
-    <?php print_r($array); ?>
+    <?php print_r($super_admin_list); ?>
   </p>
   <hr>
 
 
   <p>
-    <strong>title</strong>
+    <strong>Law 1-1 Info</strong>
     <br>
-    <?php print_r($array); ?>
+    <?php print_r($law_info); ?>
   </p>
   <hr>
 
 
   <p>
-    <strong>title</strong>
+    <strong>Law Model List</strong>
     <br>
-    <?php print_r($array); ?>
+    <?php print_r($law_model_info); ?>
+  </p>
+  <hr>
+
+  <p>
+    <strong>Debate Info</strong>
+    <br>
+    <?php print_r($debate_info); ?>
+  </p>
+  <hr>
+
+  <p>
+    <strong>Debate Reply List</strong>
+    <br>
+    <?php print_r($debate_reply_list); ?>
+  </p>
+  <hr>
+
+  <p>
+    <strong>Message List</strong>
+    <br>
+    <?php print_r($message_list); ?>
   </p>
   <hr>
 
