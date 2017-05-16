@@ -1,6 +1,6 @@
 !vendor/
 
 vendor/*
-!vendor/codeigniter/framework/application/
-!vendor/codeigniter/framework/system/
-!vendor/codeigniter/frmaework/assets/
+!vendor/codeigniter/framework/application/*
+!vendor/codeigniter/framework/system/*
+!vendor/codeigniter/frmaework/assets/*
