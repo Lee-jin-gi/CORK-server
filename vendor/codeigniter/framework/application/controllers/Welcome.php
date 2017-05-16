@@ -25,4 +25,7 @@ class Welcome extends CI_Controller {
 		$data["test_info"] = $test_info;
 		$this->load->view('welcome_message',$data);
 	}
+	function test(){
+		echo "test";
+	}
 }
