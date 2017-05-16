@@ -84,7 +84,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 	<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?></p>
 
-	<a href="/main"></a>
+	<a href="/main">Main</a>
 
 
 	<?php print_r($test_info); ?>

@@ -85,8 +85,8 @@
   CustomLog "/private/var/log/apache2/local.cork-server.com-access_log" common
 
   <Directory "/Users/dvmoomoodv/Sites/cork/CORK-server/vendor/codeigniter/framework">
-      Options Indexes MultiViews
-      #Options FollowSymLinks Indexes
+      #Options Indexes MultiViews
+      Options FollowSymLinks MultiViews Indexes
 
       #AllowOverride None
       AllowOverride All
@@ -96,7 +96,6 @@
       #Order allow,deny
   </Directory>
 </VirtualHost>
-
 
 #front
 #<VirtualHost *:9001>
