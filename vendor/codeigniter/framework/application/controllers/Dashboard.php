@@ -8,7 +8,8 @@ class Dashboard extends CI_Controller {
 		// $test_info = $this->Welcome_model->select_test();
 		// $data["test_info"] = $test_info;
 		// $this->load->view('welcome_message',$data);
-		echo "dashboard";
+		$this->layout->setLayout("layout/dashboard_layout_view");
+		$this->layout->view("/dashboard/main_view");
 	}
 	function test(){
 		echo "test";

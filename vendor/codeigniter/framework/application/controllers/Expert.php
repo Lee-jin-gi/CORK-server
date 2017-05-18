@@ -8,7 +8,9 @@ class Expert extends CI_Controller {
 		// $test_info = $this->Welcome_model->select_test();
 		// $data["test_info"] = $test_info;
 		// $this->load->view('welcome_message',$data);
-		echo "expert";
+		// echo "expert";
+		$this->layout->setLayout("layout/expert_layout_view");
+		$this->layout->view("/expert/main_view");
 	}
 	function test(){
 		echo "test";

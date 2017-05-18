@@ -8,7 +8,9 @@ class User extends CI_Controller {
 		// $test_info = $this->Welcome_model->select_test();
 		// $data["test_info"] = $test_info;
 		// $this->load->view('welcome_message',$data);
-		echo "user";
+		// echo "user";
+		$this->layout->setLayout("layout/user_layout_view");
+		$this->layout->view("/user/main_view");
 	}
 	function test(){
 		echo "test";

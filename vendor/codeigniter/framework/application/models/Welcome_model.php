@@ -17,7 +17,7 @@ class Welcome_model extends CI_Model {
 	function select_test(){
 		log_message("info", "Web-Model : Welcome_model select_test");
 		$sql = "
-      SELECT * FROM tb_admin
+      SELECT * FROM tb_board order by id desc limit 0,5
     ";
 		$query = $this->db->query($sql);
 		$result = $query->result();

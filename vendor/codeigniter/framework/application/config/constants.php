@@ -83,3 +83,25 @@ defined('EXIT_USER_INPUT')     OR define('EXIT_USER_INPUT', 7); // invalid user 
 defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
 defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
 defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+
+
+
+
+if(isset($_SERVER["SHELL"])) {    // cli 작업 설정
+  $base_url = '';
+}
+else{
+  $base_url	= ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http")."://".$_SERVER['HTTP_HOST'];
+  $base_url .= str_replace(basename($_SERVER['SCRIPT_NAME']), "", $_SERVER['SCRIPT_NAME']);
+}
+
+define("BASE_URL" , $base_url);
+define('META_TITLE', 'CORK');
+define("META_URL" , $base_url);
+define('META_TYPE', 'website');
+define('META_DESCRIPTION', 'CORK description');
+define('META_KEYWORD', 'CORK');
+define('META_AUTHOR', 'CORK manager');
+
+define("PROJECT_TITLE", "CORK");
+define("APP_TITLE", "토론방");

@@ -8,7 +8,9 @@ class Manager extends CI_Controller {
 		// $test_info = $this->Welcome_model->select_test();
 		// $data["test_info"] = $test_info;
 		// $this->load->view('welcome_message',$data);
-		echo "manager";
+		// echo "manager";
+		$this->layout->setLayout("layout/manager_layout_view");
+		$this->layout->view("/manager/main_view");
 	}
 	function test(){
 		echo "test";
