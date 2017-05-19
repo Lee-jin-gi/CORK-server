@@ -8,6 +8,10 @@ application/logs/*
 !application/logs/index.html
 !application/logs/.htaccess
 
+
+# dvmoomoodv add
+frontend/node_modules/*
+
 composer.lock
 
 user_guide_src/build/*

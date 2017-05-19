@@ -88,6 +88,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			<a href="/test">Test Page</a>
 		</li>
 		<li>
+			<a href="/landing">Landing Page</a>
+		</li>
+		<li>
 			<a href="/dashboard">Dev - Dashboard Page</a>
 		</li>
 		<li>
