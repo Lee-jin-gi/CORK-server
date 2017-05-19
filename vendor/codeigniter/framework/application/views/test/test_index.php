@@ -6,7 +6,12 @@
 <html>
 <body>
 
+  <a href="/test/insert_law"><button>insert law</button></a>
+  <hr>
 
+  <a href="/test/insert_law_model"><button>insert law model</button></a>
+  <hr>
+  <hr>
   <p>
     <strong>Board List</strong>
     <br>
@@ -32,12 +37,12 @@
   <hr>
 
 
-  <p>
+  <!-- <p>
     <strong>Super Admin List</strong>
     <br>
-    <?php print_r($super_admin_list); ?>
+    <php print_r($super_admin_list); ?>
   </p>
-  <hr>
+  <hr> -->
 
 
   <p>
@@ -69,12 +74,12 @@
   </p>
   <hr>
 
-  <p>
+  <!-- <p>
     <strong>Message List</strong>
     <br>
-    <?php print_r($message_list); ?>
+    <php print_r($message_list); ?>
   </p>
-  <hr>
+  <hr> -->
 
 </body>
 </html>
