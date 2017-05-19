@@ -13,7 +13,7 @@ class Test extends CI_Controller {
 		// $data["test_info"] = $test_info;
 		// $this->load->view('/test/test_index', $data);
 
-		$this->load->model('Test_model');
+		// $this->load->model('Test_model');
 
 
 		$board_list = $this->Test_model->select_board_list();
@@ -25,8 +25,8 @@ class Test extends CI_Controller {
 		$board_reply_list = $this->Test_model->select_board_reply_list();
 		$data["board_reply_list"] = $board_reply_list;
 
-		$super_admin_list = $this->Test_model->select_super_admin_list();
-		$data["super_admin_list"] = $super_admin_list;
+		// $super_admin_list = $this->Test_model->select_super_admin_list();
+		// $data["super_admin_list"] = $super_admin_list;
 
 		$law_info = $this->Test_model->select_law_info();
 		$data["law_info"] = $law_info;
@@ -40,10 +40,38 @@ class Test extends CI_Controller {
 		$debate_reply_list = $this->Test_model->select_debate_reply_list();
 		$data["debate_reply_list"] = $debate_reply_list;
 
-		$message_list = $this->Test_model->select_message_list();
-		$data["message_list"] = $message_list;
+		// $message_list = $this->Test_model->select_message_list();
+		// $data["message_list"] = $message_list;
 
 
 		$this->load->view('/test/test_index', $data);
 	}
+	public function insert_law(){
+		// $this->load->model('Test_model');
+		// $this->load->helper('url');
+
+		$param = array(
+			'd1' => 'TESTS',
+			'd2' => 'TESTS1'
+		);
+		$this->Test_model->insert_law($param);
+
+		redirect("/test");
+	}
+
+	public function insert_law_model(){
+
+		$param = array(
+			'law_id' => 1,
+			'title' => 'test',
+			'content' => 'law_model',
+			'reg_date' => date("Y-m-d", time())
+		);
+
+		$this->Test_model->insert_law_model($param);
+
+		redirect("/test");
+	}
+
+
 }
