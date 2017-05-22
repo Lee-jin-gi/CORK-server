@@ -99,11 +99,13 @@ class Test_model extends CI_Model {
 	}
 
 	function insert_law($param){
+        
 		log_message("info", "Web-Model : Test_model_insert_law_test");
 		$this->db->insert('tb_law', $param);
 	}
 
 	function insert_law_model($param){
+
 		log_message("info", "Web-Model : Test_model_insert_law_model_test");
 		$this->db->insert('tb_law_model', $param);
 	}

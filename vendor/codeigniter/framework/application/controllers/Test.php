@@ -2,6 +2,10 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Test extends CI_Controller {
+    function __construct(){
+        log_message("info", "Web-Model : Test Constructor");
+        parent::__construct();
+    }
 	public function index()
 	{
 		// $this->load->model('Welcome_model');
@@ -54,9 +58,14 @@ class Test extends CI_Controller {
 			'd1' => 'TESTS',
 			'd2' => 'TESTS1'
 		);
+//		echo("tes123123t");
+//		print_r($param);
+//		exit;
 		$this->Test_model->insert_law($param);
 
-		redirect("/test");
+		//redirect("/test");
+		$data["check"] = "success";
+        echo json_encode($data);
 	}
 
 	public function insert_law_model(){
