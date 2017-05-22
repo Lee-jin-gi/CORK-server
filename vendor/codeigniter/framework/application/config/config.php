@@ -384,13 +384,27 @@ $config['encryption_key'] = '';
 | except for 'cookie_prefix' and 'cookie_httponly', which are ignored here.
 |
 */
-$config['sess_driver'] = 'files';
+//$config['sess_driver'] = 'files';
+//$config['sess_cookie_name'] = 'ci_session';
+//$config['sess_expiration'] = 7200;
+//$config['sess_save_path'] = NULL;
+//$config['sess_match_ip'] = FALSE;
+//$config['sess_time_to_update'] = 300;
+//$config['sess_regenerate_destroy'] = FALSE;
+
+
+
 $config['sess_cookie_name'] = 'ci_session';
-$config['sess_expiration'] = 7200;
-$config['sess_save_path'] = NULL;
+$config['sess_expiration'] = 0;
+$config['sess_expire_on_close']=TRUE;
+$config['sess_encrypt_cookie']=FALSE;
+$config['sess_use_database']=FALSE;
+$config['sess_table_name']='ci_sessions';
 $config['sess_match_ip'] = FALSE;
-$config['sess_time_to_update'] = 300;
-$config['sess_regenerate_destroy'] = FALSE;
+$config['sess_match_useragent']=FALSE;
+$config['sess_time_to_update'] = 144000;
+// 맥 개발환경 적용뒤 세션 패스를 찾게되어 해당 옵션 적용.
+$config['sess_save_path'] = sys_get_temp_dir();
 
 /*
 |--------------------------------------------------------------------------

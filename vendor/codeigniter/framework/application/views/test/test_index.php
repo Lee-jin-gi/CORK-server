@@ -1,21 +1,50 @@
 <?php
-  $array = array("a","b","c");
+defined('BASEPATH') OR exit('No direct script access allowed');
+ob_start("ob_gzhandler");
+$array = array("a","b","c");
 ?>
 
+<html lang="ko">
+<head>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script>
+        function a(){
+            $.ajax({
+                type:"POST",
+                url:"/test/insert_law",
+                dataType:"JSON",
+                data:{
+                    data : "data"
+                },
+                success:function(data){
+                   alert("success");
 
-<html>
+                },
+                error:function(xhr,status,error){
+                    alert("code:"+xhr.status+"\n"+"message:"+xhr.responseText+"\n"+"error:"+error);
+                }
+            });
+        }
+
+    </script>
+</head>
 <body>
 
-  <a href="/test/insert_law"><button>insert law</button></a>
-  <hr>
 
-  <a href="/test/insert_law_model"><button>insert law model</button></a>
-  <hr>
+<!--    <form action="/test/insert_law?12312312">-->
+<!--        <button>insert law</button>-->
+<!--    </form>-->
+    <span onclick="a()">insert law</span>
+    <hr>
+    <form action="/test/insert_law_model">
+        <button>insert law</button>
+    </form>
+
+
   <hr>
   <p>
     <strong>Board List</strong>
     <br>
-    <!-- <?php print_r($test_info); ?> -->
     <?php print_r($board_list); ?>
   </p>
   <hr>
@@ -83,3 +112,6 @@
 
 </body>
 </html>
+<?php
+ob_end_flush();
+?>
