@@ -63,7 +63,9 @@ $autoload['libraries'] = array(
     'layout',
     'database',
     'session',
-    'user_agent'
+    'user_agent',
+    'form_validation',
+    'pagination'
 );
 
 /*
@@ -117,7 +119,7 @@ $autoload['helper'] = array(
 | config files.  Otherwise, leave it blank.
 |
 */
-$autoload['config'] = array();
+$autoload['config'] = array('test');
 
 /*
 | -------------------------------------------------------------------

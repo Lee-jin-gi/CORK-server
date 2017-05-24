@@ -24,14 +24,29 @@ class Test_model extends CI_Model {
 		return $result;
 	}
 
-	function select_board_list(){
+	function select_board_list($offset = '', $limit = ''){
 		log_message("info", "Web-Model : Test_model_select_board_test");
 		$this->db->order_by("id", "desc");
-		$this->db->limit(5);
+
+		$limit_query = '';
+
+		        if ($limit != '' OR $offset != '') {
+		            // 페이징이 있을 경우 처리
+		            // $limit_query = ' LIMIT ' . $offset . ', ' . $limit;
+								$this->db->limit($limit, $offset);
+		        }else{
+							$this->db->limit(20);
+						}
+
+
+
+
 		$query = $this->db->get('tb_board');
 		$result = $query->result();
 		return $result;
 	}
+
+
 
 	function select_login_user_info(){
 		log_message("info", "Web-Model : Test_model_select_login_user_info");
@@ -87,6 +102,23 @@ class Test_model extends CI_Model {
 		return $result;
 	}
 
+	function select_board_info($board_id){
+		log_message("info", "Web-Model : Test_model_select_board_info");
+		$this->db->select('title, content, reg_id, reg_date');
+		$query = $this->db->get_where('tb_board', array('id'=>$board_id));
+		$result = $query->row();
+
+		return $result;
+	}
+
+	function select_debate_info_by_id($debate_id){
+		log_message("info", "Web-Model : Test_model_select_debate_info");
+		$this->db->select('id, title, content');
+		$query = $this->db->get_where('tb_debate', array('id'=>$debate_id));
+		$result = $query->row();
+		return $result;
+	}
+
 	function select_debate_reply_list(){
 		log_message("info", "Web-Model : Test_model_select_debate_reply_list");
 		$this->db->select('id, content, reg_id, reg_date');
@@ -98,8 +130,19 @@ class Test_model extends CI_Model {
 		return $result;
 	}
 
+	function select_debate_back_cnt($debate_id){
+		log_message("info", "Web-Model : Test_model_update_debate_back_info");
+
+		$this->db->from('tb_debate_back');
+		$this->db->where('debate_id', $debate_id);
+		$count = $this->db->count_all_results();
+
+		return $count;
+
+	}
+
 	function insert_law($param){
-        
+
 		log_message("info", "Web-Model : Test_model_insert_law_test");
 		$this->db->insert('tb_law', $param);
 	}
@@ -109,6 +152,61 @@ class Test_model extends CI_Model {
 		log_message("info", "Web-Model : Test_model_insert_law_model_test");
 		$this->db->insert('tb_law_model', $param);
 	}
+
+	function insert_debate_content($param){
+		log_message("info", "Web-Model : Test_model_insert_debate_content");
+		$this->db->insert('tb_debate', $param);
+	}
+
+	function insert_debate_reply($param){
+		log_message("info", "Web-Model : Test_model_insert_debate_reply");
+		$this->db->insert('tb_debate_reply', $param);
+	}
+
+	function insert_debate_backup($param){
+		log_message("info", "Web-Model : Test_model_insert_debate_backup");
+		$this->db->insert('tb_debate_back', $param);
+	}
+
+	function insert_board_content($param){
+		log_message("info", "Web-Model : Test_model_insert_board_content");
+		$this->db->insert('tb_board', $param);
+	}
+
+	function delete_debate_content($debate_id, $param){
+		log_message("info", "Web-Model : Test_model_delete_debate_content");
+		$this->db->where('id', $debate_id);
+		$this->db->update('tb_debate', $param);
+	}
+
+	function delete_debate_reply($reply_id, $param){
+		log_message("info", "Web-Model : Test_model_delete_debate_reply");
+		$this->db->where('id', $reply_id);
+		$this->db->update('tb_debate_reply', $param);
+	}
+
+	function update_debate_reply($reply_id, $param){
+		log_message("info", "Web-Model : Test_model_update_debate_reply");
+		$this->db->where('id', $reply_id);
+		$this->db->update('tb_debate_reply', $param);
+	}
+
+	function update_debate_content($debate_id, $param){
+		log_message("info", "Web-Model : Test_model_update_debate_content");
+		$this->db->where('id', $debate_id);
+		$this->db->update('tb_debate', $param);
+	}
+
+	function get_board_content_count(){
+		log_message("info", "Web-Model : Test_model_get_board_content_count_info");
+
+		$this->db->from('tb_board');
+		$count = $this->db->count_all_results();
+
+		return $count;
+	}
+
+
 
 	// function select_message_list(){
 	// 	log_message("info", "Web-Model : Test_model_select_message_list");
