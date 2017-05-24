@@ -5,3 +5,4 @@ vendor/*
 .idea/*
 
 .idea/CORK-server.iml
+vendor/codeigniter/framework/application/config/database.php

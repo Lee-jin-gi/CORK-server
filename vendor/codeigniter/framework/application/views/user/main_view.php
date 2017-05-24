@@ -2,17 +2,17 @@
 
   <nav class="nav-extended">
     <div class="nav-wrapper">
-      <a href="./index.html" class="brand-logo">App Title</a>
+      <a href="./index.html" class="brand-logo"><?= APP_TITLE ?></a>
       <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li><a href="../pages/account/signin.html">로그인(-)</a></li>
-        <li><a href="../pages/account/signup.html">가입(-)</a></li>
-        <li><a href="../pages/activity/read.html">열람(M)</a></li>
-        <li><a href="../pages/activity/debate.html">토론(M)</a></li>
-        <li><a href="../pages/activity/board.html">게시판(M)</a></li>
-        <li><a href="../pages/activity/history.html">히스토리(M)</a></li>
-        <li><a href="../pages/account/account.html">계정관리(M)</a></li>
-        <li><a href="../pages/account/signout.html">로그아웃(M)</a></li>
+        <li><a href="/user/login">로그인(-)</a></li>
+        <li><a href="/user/register">가입(-)</a></li>
+        <li><a href="/user/read">열람(M)</a></li>
+        <li><a href="/user/debate">토론(M)</a></li>
+        <li><a href="/user/board">게시판(M)</a></li>
+        <li><a href="/user/history">히스토리(M)</a></li>
+        <li><a href="/user/account">계정관리(M)</a></li>
+        <li><a href="/user/account">로그아웃(M)</a></li>
       </ul>
       <ul class="side-nav" id="mobile-demo">
         <li><a href="../pages/account/signin.html">로그인(-)</a></li>
@@ -31,7 +31,7 @@
       <form>
         <div class="input-field">
           <input id="search" type="search" required>
-          <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+          <label class="label-icon" for="search"><i class="material-icons">검색</i></label>
           <i class="material-icons">close</i>
         </div>
       </form>
@@ -251,5 +251,18 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
   <script>
     $(".button-collapse").sideNav();
+
+    $('input#search').autocomplete({
+      data: {
+        "Apple": null,
+        "Microsoft": null,
+        "Google": 'http://placehold.it/250x250'
+      },
+      limit: 20, // The max amount of results that can be shown at once. Default: Infinity.
+      onAutocomplete: function(val) {
+        // Callback function when value is autcompleted.
+      },
+      minLength: 1, // The minimum length of the input for the autocomplete to start. Default: 1.
+    });
   </script>
   </body>

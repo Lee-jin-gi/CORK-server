@@ -55,7 +55,7 @@ ob_start("ob_gzhandler");
     <link href="assets/build/css/materialize.css" rel="stylesheet">
 
 
- 	  <title>App title</title>
+ 	  <title><?= APP_TITLE ?></title>
 
  		<script>
  		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
