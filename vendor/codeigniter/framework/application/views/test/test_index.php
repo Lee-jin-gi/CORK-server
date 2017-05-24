@@ -26,6 +26,119 @@ $array = array("a","b","c");
             });
         }
 
+        function insert_debate_content(){
+          $.ajax({
+            type:"POST",
+            url:"/test/insert_debate_content",
+            dataType:"JSON",
+            data:{
+              title : "title"
+            },
+            success:function(data){
+              alert("success");
+            },
+            error:function(xhr, status, error){
+              alert("code:"+xhr.status+"\n"+"message:"+xhr.responseText+"\n"+"error:"+error);
+            }
+          });
+        }
+
+        function insert_debate_reply(){
+          $.ajax({
+            type:"POST",
+            url:"/test/insert_debate_reply",
+            dataType:"JSON",
+            data:{
+              title : "title"
+            },
+            success:function(data){
+              alert("success");
+            },
+            error:function(xhr, status, error){
+              alert("code:"+xhr.status+"\n"+"message:"+xhr.responseText+"\n"+"error:"+error);
+            }
+          });
+        }
+
+        function update_debate_content(){
+          $.ajax({
+            type:"POST",
+            url:"/test/debate_content_backup",
+            dataType:"JSON",
+            data:{
+              title : "title"
+            },
+            success:function(data){
+              alert("success");
+            },
+            error:function(xhr, status, error){
+              alert("code:"+xhr.status+"\n"+"message:"+xhr.responseText+"\n"+"error:"+error);
+            }
+          });
+
+          $.ajax({
+            type:"POST",
+            url:"/test/update_debate_content",
+            dataType:"JSON",
+            data:{
+              title : "title"
+            },
+            success:function(data){
+              alert("success");
+            },
+            error:function(xhr, status, error){
+              alert("code:"+xhr.status+"\n"+"message:"+xhr.responseText+"\n"+"error:"+error);
+            }
+          });
+        }
+        function delete_debate_content(){
+          $.ajax({
+            type:"POST",
+            url:"/test/delete_debate_content",
+            dataType:"JSON",
+            data:{
+              title : "title"
+            },
+            success:function(data){
+              alert("success");
+            },
+            error:function(xhr, status, error){
+              alert("code:"+xhr.status+"\n"+"message:"+xhr.responseText+"\n"+"error:"+error);
+            }
+          });
+        }
+        function delete_debate_reply(){
+          $.ajax({
+            type:"POST",
+            url:"/test/delete_debate_reply",
+            dataType:"JSON",
+            data:{
+              title : "title"
+            },
+            success:function(data){
+              alert("success");
+            },
+            error:function(xhr, status, error){
+              alert("code:"+xhr.status+"\n"+"message:"+xhr.responseText+"\n"+"error:"+error);
+            }
+          });
+        }
+        function update_debate_reply(){
+          $.ajax({
+            type:"POST",
+            url:"/test/update_debate_reply",
+            dataType:"JSON",
+            data:{
+              title : "title"
+            },
+            success:function(data){
+              alert("success");
+            },
+            error:function(xhr, status, error){
+              alert("code:"+xhr.status+"\n"+"message:"+xhr.responseText+"\n"+"error:"+error);
+            }
+          });
+        }
     </script>
 </head>
 <body>
@@ -40,7 +153,26 @@ $array = array("a","b","c");
         <button>insert law</button>
     </form>
 
+    <a href="/test/test_form" target="_blank"><button>Form test</button></a>
 
+  <hr>
+
+    <a href="/test/board" target="_blank"><button>Board test</button></a>
+
+<hr>
+        <button onclick="insert_debate_content()">insert debates content</button>
+  <hr>
+
+        <button onclick="insert_debate_reply()">insert debate reply</button>
+
+  <hr>
+        <button onclick="update_debate_content()">update debate content</button>
+  <hr>
+        <button onclick="delete_debate_content()">delete debate content</button>
+  <hr>
+        <button onclick="update_debate_reply()">update debate reply</button>
+  <hr>
+        <button onclick="delete_debate_reply()">delete debate reply</button>
   <hr>
   <p>
     <strong>Board List</strong>
