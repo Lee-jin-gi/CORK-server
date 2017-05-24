@@ -56,15 +56,19 @@ class Test extends CI_Controller {
   }
 
   public function board(){
-    $config['base_url'] = '/test/board/page';
+    $config['base_url'] = BASE_URL.'/test/board/page';
     $config['total_rows'] = $this -> Test_model -> get_board_content_count();
-    $config['per_page'] = 5;
-    $config['uri_segment'] = 3;
+    $config['per_page'] = 50;
+    $config['uri_segment'] = 4;
+    $config['num_links'] = 3;
+
 
     $this->pagination->initialize($config);
     $data['pagination'] = $this -> pagination -> create_links();
 
-    $page = $this -> uri -> segment(5,1);
+
+
+    $page = $this -> uri -> segment(4,1);
 
     if($page > 1){
       $start = (($page / $config['per_page'])) * $config['per_page'];
@@ -261,12 +265,46 @@ class Test extends CI_Controller {
 
   public function view($board_id){
     $board_content = $this->Test_model->select_board_info($board_id);
-
-    echo "글 제목 : " . $board_content->title . "<br>";
-    echo "글 작성자 : " . $board_content->reg_id . "<br>";
-    echo "글 작성시간 : " . $board_content->reg_date . "<br>";
-    echo "글 내용 : " . $board_content->content . "<br>";
+    $data["board_content"] = $board_content;
+    $this -> load -> view('/test/board_view', $data);
+    // echo "글 제목 : " . $board_content->title . "<br>";
+    // echo "글 작성자 : " . $board_content->reg_id . "<br>";
+    // echo "글 작성시간 : " . $board_content->reg_date . "<br>";
+    // echo "글 내용 : " . $board_content->content . "<br>";
   }
 
+  public function edit($board_id){
+    $board_content = $this->Test_model->select_board_info($board_id);
+    $data["board_content"] = $board_content;
+    $this -> load -> view('/test/board_edit', $data);
+  }
+
+  public function remove($board_id){
+    $param = array(
+      'del_st' => '1',
+      'del_id' =>'100',
+      'del_date' => date("Y-m-d H:i:s", time())
+    );
+
+    $this->Test_model->update_board_content($board_id, $param);
+
+    redirect('/test/board');
+  }
+
+  public function edit_board_content(){
+    $board_id = $_POST["id"];
+    $param = array(
+      'title' => $_POST["board_title"],
+      'content' => $_POST["board_content"],
+      'upt_id' => $_POST["user_id"],
+      'upt_date' => date("Y-m-d H:i:s", time())
+    );
+
+    $this->Test_model->update_board_content($board_id, $param);
+    $data["check"] = "board content update success";
+    echo json_encode($data);
+
+    redirect('/test/board');
+  }
 
 }

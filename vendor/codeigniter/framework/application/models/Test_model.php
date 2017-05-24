@@ -41,7 +41,7 @@ class Test_model extends CI_Model {
 
 
 
-		$query = $this->db->get('tb_board');
+		$query = $this->db->get_where('tb_board', array('del_st'=>!1));
 		$result = $query->result();
 		return $result;
 	}
@@ -104,7 +104,7 @@ class Test_model extends CI_Model {
 
 	function select_board_info($board_id){
 		log_message("info", "Web-Model : Test_model_select_board_info");
-		$this->db->select('title, content, reg_id, reg_date');
+		$this->db->select('id, title, content, reg_id, reg_date');
 		$query = $this->db->get_where('tb_board', array('id'=>$board_id));
 		$result = $query->row();
 
@@ -197,10 +197,19 @@ class Test_model extends CI_Model {
 		$this->db->update('tb_debate', $param);
 	}
 
+	function update_board_content($board_id, $param){
+		log_message("info", "Web-Model : Test_model_update_board_content");
+		$this->db->where('id', $board_id);
+		$this->db->update('tb_board', $param);
+	}
+
+
+
 	function get_board_content_count(){
 		log_message("info", "Web-Model : Test_model_get_board_content_count_info");
 
 		$this->db->from('tb_board');
+		$this->db->where('del_st', !1);
 		$count = $this->db->count_all_results();
 
 		return $count;
