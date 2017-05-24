@@ -1,11 +1,43 @@
 <body>
        <div class="section no-pad-bot cork-color valign-wrapper" style="min-height : 80vh;">
         <div class="container">
-          <h1 class="header center white-text" style="font-size:112px; font-weight:bold;">App title</h1>
+          <h1 class="header center white-text" style="font-size:112px; font-weight:bold;"><?= APP_TITLE ?></h1>
           <div class='row center'>
             <h4 class ="header col s12 light center white-text" style="font-size:45px;">
 "Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."
 "There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."
+
+                <br><br>
+                핵심
+                <Br>
+                반응형<br>
+                주제에 맞는 토론
+
+                http://daumfoundation.org/
+                http://soriarchive.net/introduce/
+
+                어려운 주제에 대해서 의견을 나눠보고 구조적으로 열람가능하게끔 도와주는 플랫폼
+
+
+                다음세대재단이 운영하는 소리아카이브는
+
+                다양한 사람들의 목소리들이 서로 소통되게 함으로써
+                소리를 통해 즐거운 세상, 더 나은 세상을 만드는데 기여한다는 신념 아래
+                “사람들과 소통하고 세상을 이해하는데 필요한 소리 전문 아카이브”
+                <ol>
+                    <li>
+                        반응형 플랫폼   Materialize
+                        개발속도향상
+                        사용자경험중심
+                        작업을 쉽게
+                    </li>
+                    <li>
+                        정해진 컨텐츠에 대해서 토론
+                        참여가 쉬운 소통의 장
+                        주제중심 토론   ->주제중심통합교육 참고 http://news.joins.com/article/4275029
+                        다방면 분석 레포트
+                    </li>
+                </ol>
             </h4>
           </div>
           <div class="row center">
