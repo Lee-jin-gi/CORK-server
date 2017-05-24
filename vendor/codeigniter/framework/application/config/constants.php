@@ -95,6 +95,8 @@ else{
   $base_url .= str_replace(basename($_SERVER['SCRIPT_NAME']), "", $_SERVER['SCRIPT_NAME']);
 }
 
+define('ASSETS_DIR', $base_url.'assets');
+
 define("BASE_URL" , $base_url);
 define('META_TITLE', 'CORK');
 define("META_URL" , $base_url);
