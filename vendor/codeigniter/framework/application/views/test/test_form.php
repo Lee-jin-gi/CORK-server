@@ -25,9 +25,7 @@ $array = array("a","b","c");
   <h5>User ID</h5>
   <input type="text" placeholder="1" name="user_id" value="<?php echo set_value('user_id'); ?>" size="10" />
 
-
-
-  <div><input type="submit" value="Submit" /></div>
+  <div><hr><input type="submit" value="Submit" /></div>
 
   </form>
 
