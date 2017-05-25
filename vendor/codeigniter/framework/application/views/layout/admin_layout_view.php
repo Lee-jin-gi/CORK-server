@@ -105,7 +105,7 @@ ob_start("ob_gzhandler");
              </ul>
            </div>
          </li>
-         <li class="bold active"><a class="collapsible-header active waves-effect waves-teal">게시판</a>
+         <li class="bold active"><a class="collapsible-header waves-effect waves-teal">게시판</a>
            <div class="collapsible-body" style="display: block;">
              <ul>
                <li><a href="/admin/board/list">게시판 열람</a></li>
@@ -121,14 +121,12 @@ ob_start("ob_gzhandler");
              </ul>
            </div>
          </li>
-         <li class="bold"><a class="collapsible-header  waves-effect waves-teal">JavaScript</a>
+         <li class="bold"><a class="collapsible-header active waves-effect waves-teal">유저 관리</a>
            <div class="collapsible-body">
              <ul>
-               <li><a href="carousel.html">Carousel</a></li>
-               <li><a href="collapsible.html">Collapsible</a></li>
-               <li><a href="dialogs.html">Dialogs</a></li>
-               <li><a href="dropdown.html">Dropdown</a></li>
-               <li><a href="feature-discovery.html">FeatureDiscovery</a></li>
+               <li><a href="/admin/user/list?type=all">전체 사용자 열람</a></li>
+               <li><a href="/admin/user/list?type=sns">SNS 사용자 열람</a></li>
+               <li><a href="/admin/user/list?type=email">일반 사용자 열람</a></li>
                <li><a href="media.html">Media</a></li>
                <li><a href="modals.html">Modals</a></li>
                <li><a href="parallax.html">Parallax</a></li>
