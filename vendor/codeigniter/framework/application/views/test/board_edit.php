@@ -14,8 +14,7 @@ $array = array("a","b","c");
   <?php echo validation_errors(); ?>
 
   <!-- <php echo form_open('/test/test_form_check'); ?> -->
-  <form method="post" action="/test/edit_board_content">
-  <input type="hidden" name="id" value="<?php echo $board_content -> id ?>" />
+  <form method="get" action="/admin/board/update?bid=<?=$board_content->id?>">
   <h5>Title</h5>
   <input type="text" name="board_title" value="<?php echo $board_content -> title ?>" size="50" />
 
