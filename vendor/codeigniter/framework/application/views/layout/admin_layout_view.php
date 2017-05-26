@@ -110,8 +110,8 @@ ob_start("ob_gzhandler");
              <ul>
                <li><a href="/admin/board/list">게시판 열람</a></li>
                <li><a href="/admin/board/write">게시글 추가</a></li>
-               <li><a href="chips.html">Chips</a></li>
-               <li><a href="collections.html">Collections</a></li>
+               <li><a href="/admin/debate/list">토론 게시판 열람</a></li>
+               <li><a href="/admin/debate/write">토론 게시글 추가</a></li>
                <li><a href="footer.html">Footer</a></li>
                <li><a href="forms.html">Forms</a></li>
                <li><a href="icons.html">Icons</a></li>

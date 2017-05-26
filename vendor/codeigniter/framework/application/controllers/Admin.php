@@ -34,19 +34,22 @@ class Admin extends CI_Controller {
 		}else if($action == "write"){
 			$this->board_write();
 		} else if($action == "add"){
-			$this->board_add();
+			$code = 600;
+			$this->board_add($code);
 		} else if($action == "edit"){
 			$this->board_edit($this->input->get("bid"));
 		} else if ($action == "update"){
+			$code = 601;
 			$param = array(
 				'title' => $this->input->post("board_title"),
 				'content' => $this->input->post("board_content"),
 				'upt_id' => $this->input->post("user_id"),
 				'upt_date' => date("Y-m-d H:i:s", time())
 			);
-			$this->board_update($this->input->get("bid"), $param);
+			$this->board_update($this->input->get("bid"), $param, $code, $_POST["user_id"]);
 		}else if($action == "remove"){
-			$this->board_remove($this->input->get("bid"));
+			$code = 602;
+			$this->board_remove($this->input->get("bid"), $code);
 		}
 
 		//list
@@ -61,6 +64,29 @@ class Admin extends CI_Controller {
 		}
 	}
 
+	function debate(){
+		$action = $this->uri->segment(3);
+
+		if($action == "list"){
+			$this->debate_list();
+		}else if($action == "info"){
+			$this->debate_info($this->input->get("bid"));
+		}else if($action == "write"){
+			$this->debate_write();
+		}else if($action == "add"){
+			$code = 650;
+			$this->debate_add($code);
+		}else if($action == "reply"){
+			$code = 750;
+			$this->debate_reply($this->input->get("bid"), $code);
+		}
+
+		else{
+			show_404();
+		}
+
+	}
+
 	function user(){
 		$action = $this->uri->segment(3);
 		$type = $this->input->get("type");
@@ -72,6 +98,7 @@ class Admin extends CI_Controller {
 		}else if($action == "edit"){
 			$this->user_edit($this->input->get("bid"));
 		}else if($action == "update"){
+			$code = 3;
 			$param = array(
 				'user_code' => $this->input->post("user_code"),
 				'expire_date' => $this->input->post("expire_date"),
@@ -79,9 +106,10 @@ class Admin extends CI_Controller {
 				'upt_date' => date("Y-m-d H:i:s", time())
 			);
 
-			$this->user_update($this->input->get("bid"), $param);
+			$this->user_update($_GET["bid"], $param, $code);
 		}else if($action == "reset"){
-			$this->user_reset($this->input->get("bid"));
+			$code = 4;
+			$this->user_reset($this->input->get("bid"), $code);
 		}
 
 		else{
@@ -162,6 +190,37 @@ function user_list($type){
     $this->layout->view('/admin/board_list_view', $data);
 	}
 
+	function debate_list(){
+		$config['base_url'] = '/admin/debate/list/page';
+    $config['total_rows'] = $this->Admin_model->get_debate_content_count();
+    $config['per_page'] = 50;
+    $config['uri_segment'] = 4;
+    $config['num_links'] = 3;
+
+
+    $this->pagination->initialize($config);
+    $data['pagination'] = $this -> pagination -> create_links();
+
+
+
+    $page = $this -> uri -> segment(5,1);
+
+    if($page > 1){
+      $start = (($page / $config['per_page'])) * $config['per_page'];
+    } else {
+      $start = ($page - 1) * $config['per_page'];
+    }
+
+    $limit = $config['per_page'];
+
+    $debate_list = $this->Admin_model->select_debate_list($start, $limit);
+    $data["debate_list"] = $debate_list;
+
+
+		$this->layout->setLayout("layout/admin_layout_view");
+    $this->layout->view('/admin/debate_list_view', $data);
+	}
+
 	function board_info($id){
 		$board_content = $this->Admin_model->select_board_info($id);
 		$data["board_content"] = $board_content;
@@ -176,12 +235,27 @@ function user_list($type){
 		$this->layout->view('/admin/user_info_view', $data);
 	}
 
+	function debate_info($id){
+		$debate_content = $this->Admin_model->select_debate_info($id);
+		$data["debate_content"] = $debate_content;
+
+		$reply_list = $this->Admin_model->select_reply_list($id);
+		$data["reply_list"] = $reply_list;
+
+		$this->layout->setLayout("layout/admin_layout_view");
+		$this->layout->view('/admin/debate_info_view', $data);
+	}
+
+	function debate_write(){
+		$this->layout->setLayout("layout/admin_layout_view");
+		$this->layout->view('/admin/debate_write_view');
+	}
 
 	function board_write(){
 		$this->layout->setLayout("layout/admin_layout_view");
     $this->layout->view('/admin/board_write_view');
 	}
-	function board_add(){
+	function board_add($code){
 
 		    $this->form_validation->set_rules('board_title', 'Title', 'trim|required');
 		    $this->form_validation->set_rules('board_content', 'Content', 'trim|required|max_length[100]');
@@ -197,7 +271,6 @@ function user_list($type){
 				}
 				else
 				{
-
 		      $param = array(
 		        'title' => $_POST["board_title"],
 		        'content' => $_POST["board_content"],
@@ -207,12 +280,65 @@ function user_list($type){
 		      );
 
 		      $this->Admin_model->insert_board_content($param);
-
+					$this->Admin_model->history_log($code, 0, $_POST["user_id"]);
 
 		      $data["check"] = "success";
 		      echo json_encode($data);
 		      redirect("/admin/board/list");
 				}
+	}
+
+	function debate_add($code){
+
+		    $this->form_validation->set_rules('debate_title', 'Title', 'trim|required');
+		    $this->form_validation->set_rules('debate_content', 'Content', 'trim|required|max_length[100]');
+		    $this->form_validation->set_rules('user_id', 'user_id', 'trim|required');
+
+
+
+				if ($this->form_validation->run() == FALSE)
+				{
+					$this->layout->setLayout("layout/admin_layout_view");
+					$this->layout->view('/admin/debate/write');
+				}
+				else
+				{
+
+		      $param = array(
+		        'title' => $_POST["debate_title"],
+		        'content' => $_POST["debate_content"],
+		        'reg_id' => $_POST["user_id"],
+		        'reg_date' => date("Y-m-d H:i:s", time()),
+		        'file_id' => ''
+		      );
+
+		      $this->Admin_model->insert_debate_content($param);
+					$this->Admin_model->history_log($code, 0, $_POST["user_id"]);
+
+		      $data["check"] = "success";
+		      // echo json_encode($data);
+		      redirect("/admin/debate/list");
+				}
+	}
+
+	public function debate_reply($id, $code){
+		$this->form_validation->set_rules('reply_content', 'Content', 'trim|required|max_length[100]');
+		$this->form_validation->set_rules('user_id', 'user_id', 'trim|required');
+
+
+		$param = array(
+			"debate_id" => $id,
+			"content" => $this->input->post("reply_content"),
+			"reg_id" => $this->input->post("user_id"),
+			"reg_date" => date("T-m-d H:i:s", time())
+		);
+
+		$this->Admin_model->insert_debate_reply($param);
+		$this->Admin_model->history_log($code, $id, $_POST["user_id"]);
+
+		$data["check"] = "success";
+		// echo json_encode($data);
+		redirect("/admin/debate/info?bid=$id");
 	}
 	public function board_edit($id){
 		$board_content = $this->Admin_model->select_board_info($id);
@@ -221,9 +347,9 @@ function user_list($type){
 		$this->layout->view('/admin/board_edit_view', $data);
 	}
 
-	public function user_reset($id){
+	public function user_reset($id, $code){
 		$str = "pass1234!@#$";
-		$hash_str = hash("sha256", $str);
+		$hash_str = hash("sha512", $str);
 
 		$param = array(
 			"auth_code" => $hash_str,
@@ -232,6 +358,8 @@ function user_list($type){
 		);
 
 		$this->Admin_model->reset_user_password($id, $param);
+		$this->Admin_model->history_log($code, $id, $id);
+
 		$data["check"] = "reset password success";
 
 		redirect('/admin/user/list');
@@ -247,16 +375,20 @@ function user_list($type){
 
 
 
-	public function board_update($id, $param){
+	public function board_update($id, $param, $code, $upt_id){
 		$this->Admin_model->update_board_content($id, $param);
+
+		$this->Admin_model->history_log($code, $id, $upt_id);
+
 		$data["check"] = "board content update success";
 		//echo json_encode($data);
 
 		redirect('/admin/board/list');
 	}
 
-	public function user_update($id, $param){
+	public function user_update($id, $param, $code){
 		$this->Admin_model->update_user_info($id, $param);
+				$this->Admin_model->history_log($code, $id, 0);
 		$data["check"] = "user info update success";
 		//echo json_encode($data);
 
@@ -264,7 +396,7 @@ function user_list($type){
 	}
 
 
-	public function board_remove($id){
+	public function board_remove($id, $code){
 		$param = array(
 			'del_st' => '1',
 			'del_id' =>'100',
@@ -272,6 +404,7 @@ function user_list($type){
 		);
 
 		$this->Admin_model->update_board_content($id, $param);
+		$this->Admin_model->history_log($code, $id, 100);
 
 		redirect("admin/board/list");
 	}
