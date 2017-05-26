@@ -60,6 +60,16 @@ class Test_model extends CI_Model {
 		return $result;
 	}
 
+	 function select_user_list(){
+		log_message("info", "Web-Model : Test_model_select_user_list");
+ 		$this->db->select('id, email, auth_code, reg_date');
+		$this->db->limit(20);
+ 		$query = $this->db->get('tb_user');
+ 		$result = $query->result();
+
+ 		return $result;
+	 }
+
 	function select_board_reply_list(){
 		log_message("info", "Web-Model : Test_model_select_board_reply_list");
 		$this->db->select('id, content');
