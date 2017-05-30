@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class User extends CI_Controller {
 	function __construct() {
 		parent::__construct ();
-		set_language();
+		// set_language();
 		$this->version = "alpha/";
 		$this->category = "intro/";
 		$this->layout_path = $this->version."layout/";
