@@ -14,21 +14,26 @@
 
 
 
-                 <div class="input-field col s6">
+                 <div class="input-field s6">
                     <input id="input-title" name="board_title" type="text" class="validate">
                     <label for="input-title">Title</label>
                   </div>
-                  <div class="input-field col s6">
+                  <br>
+                  <div class="input-field s6">
                      <input id="input-content" name="board_content" type="text" class="validate">
                      <label for="input-content">Content</label>
                    </div>
-                   <div class="input-field col s6">
+                   <br>
+
+                   <div class="input-field s6">
                       <input id="input-id" name="user_id" type="number" class="validate">
                       <label for="input-id">User id</label>
                     </div>
-
-                 <div><input type="submit" value="Submit" /></div>
-
+<br>
+                 <!-- <div><input type="submit" value="Submit" /></div> -->
+                 <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+                     <i class="material-icons right">send</i>
+                   </button>
                  </form>
 
 

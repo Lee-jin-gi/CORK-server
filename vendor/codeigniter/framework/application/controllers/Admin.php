@@ -24,6 +24,67 @@ class Admin extends CI_Controller {
 		echo "test";
 	}
 
+	function book_mark(){
+		$chg_st = $this->input->post("chg_st");
+		$debate_id = $this->input->post("debate_id");
+		$user_id = $this->input->post("user_id");
+
+		$status = $this->get_bm_status($debate_id, $user_id);
+		if($chg_st == 'on'){
+			$chg_st = 1;
+		}else{
+			$chg_st = 0;
+		}
+		if($status == "0"){
+			//insert
+			$param = array(
+				'debate_id' => $debate_id,
+				'user_id' => $user_id,
+				'reg_id' => $user_id,
+				'reg_date' => date("Y-m-d H:i:s", time()),
+				'chg_st' => $chg_st,
+				'chg_date' => date("Y-m-d H:i:s", time())
+			);
+			$this->insert_book_mark($debate_id, $param);
+		}else{
+			//update
+			$param = array(
+				'upt_id' => $user_id,
+				'upt_date' => date("Y-m-d H:i:s", time()),
+				'chg_st' => $chg_st,
+				'chg_date' => date("Y-m-d H:i:s", time())
+			);
+			$this->update_book_mark($param, $debate_id, $user_id);
+		}
+	}
+
+	function get_bm_status($debate_id, $user_id){
+
+		$bm_status = $this->Admin_model->get_bm_status($debate_id, $user_id);
+
+		if(isset($bm_status)){
+			if($bm_status -> chg_st == 1){
+				return "exist_1";
+			}else if($bm_status -> chg_st == 0){
+				return "exist_0";
+			}
+		}else{
+			return "0";
+			// 이 경우 insert 해주면 됨
+		}
+	}
+
+	function insert_book_mark($debate_id, $param){
+		$this->Admin_model->insert_book_mark($param);
+		redirect ("/admin/debate/info?bid=$debate_id");
+	}
+
+	function update_book_mark($param, $debate_id, $user_id){
+		$this->Admin_model->update_book_mark($param, $debate_id, $user_id);
+		redirect ("/admin/debate/info?bid=$debate_id");
+	}
+
+
 	function board(){
 		$action = $this->uri->segment(3);
 
@@ -50,6 +111,9 @@ class Admin extends CI_Controller {
 		}else if($action == "remove"){
 			$code = 602;
 			$this->board_remove($this->input->get("bid"), $code);
+		}else if($action == "reply"){
+			$code = 700;
+			$this->board_reply($this->input->get("bid"), $code);
 		}
 
 		//list
@@ -76,6 +140,20 @@ class Admin extends CI_Controller {
 		}else if($action == "add"){
 			$code = 650;
 			$this->debate_add($code);
+		} else if($action == "edit"){
+			$this->debate_edit($this->input->get("bid"));
+		} else if ($action == "update"){
+			$code = 651;
+			$param = array(
+				'title' => $this->input->post("debate_title"),
+				'content' => $this->input->post("debate_content"),
+				'upt_id' => $this->input->post("user_id"),
+				'upt_date' => date("Y-m-d H:i:s", time())
+			);
+			$this->debate_update($this->input->get("bid"), $param, $code, $_POST["user_id"]);
+		}else if($action == "remove"){
+			$code = 652;
+			$this->debate_remove($this->input->get("bid"), $code);
 		}else if($action == "reply"){
 			$code = 750;
 			$this->debate_reply($this->input->get("bid"), $code);
@@ -124,7 +202,16 @@ function user_list($type){
 	$config['per_page'] = 50;
 	$config['uri_segment'] = 4;
 	$config['num_links'] = 3;
-
+	$config['prev_tag_open'] = "<li class='waves-effect'><i class='material-icons'>";
+	$config['prev_tag_close'] = "</i></li>";
+	$config['next_tag_open'] = "<li class='waves-effect'><i class='material-icons'>";
+	$config['next_tag_close'] = "</i></li>";
+	$config['num_tag_open'] = "<li class='waves-effect'>";
+	$config['num_tag_close'] = "</li>";
+	$config['first_link'] = FALSE;
+	$config['last_link'] = FALSE;
+	$config['cur_tag_open'] = "<li class='active'><a href='#'>";
+	$config['cur_tag_close'] = "</a></li>";
 
 	$this->pagination->initialize($config);
 	$data['pagination'] = $this -> pagination -> create_links();
@@ -165,13 +252,23 @@ function user_list($type){
 		$config['base_url'] = '/admin/board/list/page';
     $config['total_rows'] = $this->Admin_model->get_board_content_count();
     $config['per_page'] = 50;
-    $config['uri_segment'] = 4;
-    $config['num_links'] = 3;
+    $config['uri_segment'] = 5;
+    $config['num_links'] = 4;
+
+		$config['prev_tag_open'] = "<li class='waves-effect'><i class='material-icons'>";
+		$config['prev_tag_close'] = "</i></li>";
+		$config['next_tag_open'] = "<li class='waves-effect'><i class='material-icons'>";
+		$config['next_tag_close'] = "</i></li>";
+		$config['num_tag_open'] = "<li class='waves-effect'>";
+		$config['num_tag_close'] = "</li>";
+		$config['first_link'] = FALSE;
+		$config['last_link'] = FALSE;
+		$config['cur_tag_open'] = "<li class='active'><a href='#'>";
+		$config['cur_tag_close'] = "</a></li>";
 
 
     $this->pagination->initialize($config);
     $data['pagination'] = $this -> pagination -> create_links();
-
 
 
     $page = $this -> uri -> segment(5,1);
@@ -194,9 +291,18 @@ function user_list($type){
 		$config['base_url'] = '/admin/debate/list/page';
     $config['total_rows'] = $this->Admin_model->get_debate_content_count();
     $config['per_page'] = 50;
-    $config['uri_segment'] = 4;
-    $config['num_links'] = 3;
-
+    $config['uri_segment'] = 5;
+    $config['num_links'] = 4;
+		$config['prev_tag_open'] = "<li class='waves-effect'><i class='material-icons'>";
+		$config['prev_tag_close'] = "</i></li>";
+		$config['next_tag_open'] = "<li class='waves-effect'><i class='material-icons'>";
+		$config['next_tag_close'] = "</i></li>";
+		$config['num_tag_open'] = "<li class='waves-effect'>";
+		$config['num_tag_close'] = "</li>";
+		$config['first_link'] = FALSE;
+		$config['last_link'] = FALSE;
+		$config['cur_tag_open'] = "<li class='active'><a href='#'>";
+		$config['cur_tag_close'] = "</a></li>";
 
     $this->pagination->initialize($config);
     $data['pagination'] = $this -> pagination -> create_links();
@@ -224,6 +330,10 @@ function user_list($type){
 	function board_info($id){
 		$board_content = $this->Admin_model->select_board_info($id);
 		$data["board_content"] = $board_content;
+
+		$reply_list = $this->Admin_model->select_board_reply_list($id);
+		$data["reply_list"] = $reply_list;
+
 		$this->layout->setLayout("layout/admin_layout_view");
 		$this->layout->view('/admin/board_info_view', $data);
 	}
@@ -239,8 +349,23 @@ function user_list($type){
 		$debate_content = $this->Admin_model->select_debate_info($id);
 		$data["debate_content"] = $debate_content;
 
-		$reply_list = $this->Admin_model->select_reply_list($id);
+		$reply_list = $this->Admin_model->select_debate_reply_list($id);
 		$data["reply_list"] = $reply_list;
+
+		$bm_status = $this->Admin_model->get_bm_status($id, 100);
+		$data["bm_status"] = $bm_status;
+
+
+		// if(isset($bm_status)){
+		// 	if($bm_status -> chg_st == 1){
+		// 		return "exist_1";
+		// 	}else if($bm_status -> chg_st == 0){
+		// 		return "exist_0";
+		// 	}
+		// }else{
+		// 	return "0";
+		// 	// 이 경우 insert 해주면 됨
+		// }
 
 		$this->layout->setLayout("layout/admin_layout_view");
 		$this->layout->view('/admin/debate_info_view', $data);
@@ -340,11 +465,39 @@ function user_list($type){
 		// echo json_encode($data);
 		redirect("/admin/debate/info?bid=$id");
 	}
+
+	public function board_reply($id, $code){
+		$this->form_validation->set_rules('reply_content', 'Content', 'trim|required|max_length[100]');
+		$this->form_validation->set_rules('user_id', 'user_id', 'trim|required');
+
+
+		$param = array(
+			"board_id" => $id,
+			"content" => $this->input->post("reply_content"),
+			"reg_id" => $this->input->post("user_id"),
+			"reg_date" => date("T-m-d H:i:s", time())
+		);
+
+		$this->Admin_model->insert_board_reply($param);
+		$this->Admin_model->history_log($code, $id, $_POST["user_id"]);
+
+		$data["check"] = "success";
+		// echo json_encode($data);
+		redirect("/admin/board/info?bid=$id");
+	}
+
 	public function board_edit($id){
 		$board_content = $this->Admin_model->select_board_info($id);
 		$data["board_content"] = $board_content;
 		$this->layout->setLayout("layout/admin_layout_view");
 		$this->layout->view('/admin/board_edit_view', $data);
+	}
+
+	public function debate_edit($id){
+		$debate_content = $this->Admin_model->select_debate_info($id);
+		$data["debate_content"] = $debate_content;
+		$this->layout->setLayout("layout/admin_layout_view");
+		$this->layout->view('/admin/debate_edit_view', $data);
 	}
 
 	public function user_reset($id, $code){
@@ -386,6 +539,17 @@ function user_list($type){
 		redirect('/admin/board/list');
 	}
 
+	public function debate_update($id, $param, $code, $upt_id){
+		$this->Admin_model->update_debate_content($id, $param);
+
+		$this->Admin_model->history_log($code, $id, $upt_id);
+
+		$data["check"] = "debate content update success";
+		//echo json_encode($data);
+
+		redirect('/admin/debate/list');
+	}
+
 	public function user_update($id, $param, $code){
 		$this->Admin_model->update_user_info($id, $param);
 				$this->Admin_model->history_log($code, $id, 0);
@@ -407,5 +571,18 @@ function user_list($type){
 		$this->Admin_model->history_log($code, $id, 100);
 
 		redirect("admin/board/list");
+	}
+
+	public function debate_remove($id, $code){
+		$param = array(
+			'del_st' => '1',
+			'del_id' =>'100',
+			'del_date' => date("Y-m-d H:i:s", time())
+		);
+
+		$this->Admin_model->update_debate_content($id, $param);
+		$this->Admin_model->history_log($code, $id, 100);
+
+		redirect("admin/debate/list");
 	}
 }

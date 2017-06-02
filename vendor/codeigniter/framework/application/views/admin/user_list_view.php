@@ -9,10 +9,13 @@
                      <header>
                          <h1></h1>
                      </header>
-               <div style="width: 450px; text-align: right;">
+                     <nav class="nav-extended">
+                     <div class="nav-content">
+                       <span class="nav-title">사용자 리스트</span>
                </div>
+             </nav>
                <br>
-                     <table class="striped">
+                     <table class="bordered centered highlight">
                          <thead>
                              <tr>
                                  <th scope="col">번호</th>
@@ -27,9 +30,9 @@
                  {
                             ?>
                              <tr>
-                                 <th scope="row"><?php echo $lt -> id;?></th>
+                                 <td scope="row"><?php echo $lt -> id;?></td>
                                  <td><a href="/admin/user/info?bid=<?=$lt->id?>"> <?php echo $lt -> email;?> </a></td>
-                                 <td><?php echo $lt -> auth_code;?></td>
+                                 <td style="width: 200px; text-overflow: ellipsis; overflow: hidden; display: inline-block;"><?php echo $lt -> auth_code;?></td>
                                  <td>
                                  <time datetime="<?php echo mdate("%Y년 %m월 %j일", human_to_unix($lt -> reg_date)); ?>">
                                      <?php echo mdate("%Y년 %m월 %j일", human_to_unix($lt -> reg_date));?>
@@ -39,12 +42,11 @@
                              }
                             ?>
                          </tbody>
-
-                         <tfoot>
-                           <tr>
-                               <th colspan="5"><?php echo $pagination;?></th>
-                           </tr>
-                       </tfoot>
+                       </table>
+                       <hr>
+                       <div style="text-align : center;">
+                              <ul class="pagination"><?php echo $pagination;?></ul>
+                            </div>
                      </table>
                  </article>
 
