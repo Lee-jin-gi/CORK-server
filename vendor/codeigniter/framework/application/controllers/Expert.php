@@ -5,7 +5,20 @@ class Expert extends CI_Controller {
 
 	function __construct() {
 		parent::__construct ();
-		$this->global_data["page"] = "expert";
+
+		$allow_ip =
+		array(
+				"127.0.0.1", "0:0:0:0:0:0:0:1", "::1"
+		);
+		if (in_array($this->input->ip_address(), $allow_ip)) {
+
+		}else{
+			show_error("해당 접속IP는 승인된IP가 아닙니다.");
+		}
+
+
+		$this->layout->setLayout("layout/expert_layout_view");
+
 	}
 	public function index()
 	{
@@ -14,7 +27,7 @@ class Expert extends CI_Controller {
 		// $data["test_info"] = $test_info;
 		// $this->load->view('welcome_message',$data);
 		// echo "expert";
-		$this->layout->setLayout("layout/expert_layout_view");
+
 		$this->layout->view("/expert/main_view");
 	}
 	function test(){
