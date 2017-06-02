@@ -52,8 +52,8 @@ ob_start("ob_gzhandler");
 
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="assets/build/css/materialize.css" rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="<?=ASSETS_DIR?>/build/css/materialize.css" rel="stylesheet">
+    <link href="<?=ASSETS_DIR?>/css/style.css" rel="stylesheet">
 
 
  	  <title>App title</title>
@@ -69,6 +69,33 @@ ob_start("ob_gzhandler");
 
 
    </head>
+   <header>
+      <nav class="top-nav">
+        <div class="container">
+          <div class="nav-wrapper"><a class="page-title">CORK - EXPERT</a></div>
+        </div>
+      </nav>
+
+
+      <div class="container"><a href="#" data-activates="nav-mobile" class="button-collapse top-nav full hide-on-large-only"><i class="material-icons">menu</i></a></div>
+      <ul id="nav-mobile" class="side-nav fixed" style="transform: translateX(-100%);">
+        <li class="logo"><a id="logo-container" href="http://materializecss.com/" class="brand-logo">
+            <object id="front-page-logo" type="image/svg+xml" data="res/materialize.svg">Your browser does not support SVG</object></a></li>
+        <li class="no-padding">
+          <ul class="collapsible collapsible-accordion">
+            <li class="bold active"><a class="collapsible-header active waves-effect waves-teal">북마크</a>
+              <div class="collapsible-body" style="display: block;">
+                <ul>
+                  <li><a href="/expert/book_mark/list">북마크 열람</a></li>
+                </ul>
+              </div>
+            </li>
+
+          </ul>
+        </li>
+      </ul>
+    </header>
+
  	<?=$content_for_layout?>
  </html>
 

@@ -84,67 +84,46 @@ ob_start("ob_gzhandler");
    <ul id="nav-mobile" class="side-nav fixed" style="transform: translateX(-100%);">
      <li class="logo"><a id="logo-container" href="http://materializecss.com/" class="brand-logo">
          <object id="front-page-logo" type="image/svg+xml" data="res/materialize.svg">Your browser does not support SVG</object></a></li>
-
-     <li class="bold"><a href="about.html" class="waves-effect waves-teal">About</a></li>
-     <li class="bold"><a href="getting-started.html" class="waves-effect waves-teal">Getting Started</a></li>
      <li class="no-padding">
        <ul class="collapsible collapsible-accordion">
-         <li class="bold"><a class="collapsible-header  waves-effect waves-teal">CSS</a>
-           <div class="collapsible-body">
-             <ul>
-               <li><a href="color.html">Color</a></li>
-               <li><a href="grid.html">Grid</a></li>
-               <li><a href="helpers.html">Helpers</a></li>
-               <li><a href="media-css.html">Media</a></li>
-               <li><a href="pulse.html">Pulse</a></li>
-               <li><a href="sass.html">Sass</a></li>
-               <li><a href="shadow.html">Shadow</a></li>
-               <li><a href="table.html">Table</a></li>
-               <li><a href="css-transitions.html">Transitions</a></li>
-               <li><a href="typography.html">Typography</a></li>
-             </ul>
-           </div>
-         </li>
-         <li class="bold active"><a class="collapsible-header waves-effect waves-teal">게시판</a>
+         <li class="bold active"><a class="collapsible-header active waves-effect waves-teal">게시판</a>
            <div class="collapsible-body" style="display: block;">
              <ul>
                <li><a href="/admin/board/list">게시판 열람</a></li>
                <li><a href="/admin/board/write">게시글 추가</a></li>
                <li><a href="/admin/debate/list">토론 게시판 열람</a></li>
                <li><a href="/admin/debate/write">토론 게시글 추가</a></li>
-               <li><a href="footer.html">Footer</a></li>
-               <li><a href="forms.html">Forms</a></li>
-               <li><a href="icons.html">Icons</a></li>
-               <li><a href="navbar.html">Navbar</a></li>
-               <li><a href="pagination.html">Pagination</a></li>
-               <li><a href="preloader.html">Preloader</a></li>
              </ul>
            </div>
          </li>
-         <li class="bold"><a class="collapsible-header active waves-effect waves-teal">유저 관리</a>
+         <li class="bold"><a class="collapsible-header waves-effect waves-teal">유저 관리</a>
            <div class="collapsible-body">
              <ul>
                <li><a href="/admin/user/list?type=all">전체 사용자 열람</a></li>
                <li><a href="/admin/user/list?type=sns">SNS 사용자 열람</a></li>
                <li><a href="/admin/user/list?type=email">일반 사용자 열람</a></li>
-               <li><a href="media.html">Media</a></li>
-               <li><a href="modals.html">Modals</a></li>
-               <li><a href="parallax.html">Parallax</a></li>
-               <li><a href="pushpin.html">Pushpin</a></li>
-               <li><a href="scrollfire.html">ScrollFire</a></li>
-               <li><a href="scrollspy.html">Scrollspy</a></li>
-               <li><a href="side-nav.html">SideNav</a></li>
-               <li><a href="tabs.html">Tabs</a></li>
-               <li><a href="transitions.html">Transitions</a></li>
-               <li><a href="waves.html">Waves</a></li>
+
+             </ul>
+           </div>
+         </li>
+         <li class="bold"><a class="collapsible-header waves-effect waves-teal">단위 테스트</a>
+           <div class="collapsible-body">
+             <ul>
+               <li><a href="/unit/debate?offset=0&limit=100">토론게시판 단위 테스트</a></li>
+               <li><a href="/unit/debate_reply?offset=0&limit=100">토론게시판 댓글 단위 테스트</a></li>
+               <li><a href="/unit/debate_back?offset=0&limit=100">토론게시판 백업 단위 테스트</a></li>
+               <li><a href="/unit/board?offset=0&limit=100">일반게시판 단위 테스트</a></li>
+               <li><a href="/unit/board_reply?offset=0&limit=100">일반게시판 댓글 단위 테스트</a></li>
+               <li><a href="/unit/law?offset=0&limit=100">헌법 단위 테스트</a></li>
+               <li><a href="/unit/law_model?offset=0&limit=100">판례 단위 테스트</a></li>
+               <li><a href="/unit/log?offset=0&limit=100">로그 단위 테스트</a></li>
+               <li><a href="/unit/user?offset=0&limit=100">사용자 단위 테스트</a></li>
+               <li><a href="/unit/user_info?offset=0&limit=100">사용자 정보 단위 테스트</a></li>
              </ul>
            </div>
          </li>
        </ul>
      </li>
-     <li class="bold"><a href="http://materializecss.com/mobile.html" class="waves-effect waves-teal">Mobile</a></li>
-     <li class="bold"><a href="showcase.html" class="waves-effect waves-teal">Showcase</a></li>
-     <li class="bold"><a href="themes.html" class="waves-effect waves-teal">Themes</a></li>
    </ul>
  </header>
 

@@ -25,7 +25,7 @@ class Admin_model extends CI_Model {
 	// }
 
   function get_board_content_count(){
-    log_message("info", "Web-Model : Test_model_get_board_content_count_info");
+    // $this->load->model('Welcome_model');
 
     $this->db->from('tb_board');
     $this->db->where('del_st', !1);
@@ -61,7 +61,10 @@ class Admin_model extends CI_Model {
 
   function select_board_list($offset = '', $limit = ''){
 
-    $this->db->order_by("id", "desc");
+		$this->db->select("b.id, b.title, (select count(*) from tb_board_reply br where b.id=br.board_id) reply_cnt, b.reg_id, b.reg_date", false);
+		$this->db->from('tb_board b');
+		$this->db->order_by("b.id", "desc");
+		$this->db->where('del_st', !1);
 
     $limit_query = '';
 
@@ -74,9 +77,10 @@ class Admin_model extends CI_Model {
     }
 
 
-    $query = $this->db->get_where('tb_board', array('del_st'=>!1));
-    $result = $query->result();
-    return $result;
+
+		$result = $this->db->get();
+
+    return $result->result();
 
   }
 
@@ -85,7 +89,7 @@ class Admin_model extends CI_Model {
 		$this->db->select("d.id, d.title, (select count(*) from tb_debate_reply dr where d.id=dr.debate_id) reply_cnt, d.reg_id, d.reg_date", false);
 		$this->db->from('tb_debate d');
 		$this->db->order_by("d.id", "desc");
-
+		$this->db->where('del_st', !1);
     $limit_query = '';
 
     if ($limit != '' OR $offset != '') {
@@ -129,7 +133,17 @@ class Admin_model extends CI_Model {
 	 return $result;
 	}
 
-	function select_reply_list($debate_id){
+	function select_board_reply_list($board_id){
+		$this->db->select('id, content, reg_id, reg_date');
+		$this->db->order_by('id', 'desc');
+		$query = $this->db->get_where('tb_board_reply', array("board_id" => $board_id));
+
+		$result = $query->result();
+
+		return $result;
+	}
+
+	function select_debate_reply_list($debate_id){
 		$this->db->select('id, content, reg_id, reg_date');
 		$this->db->order_by('id', 'desc');
 		$query = $this->db->get_where('tb_debate_reply', array("debate_id" => $debate_id));
@@ -154,6 +168,30 @@ class Admin_model extends CI_Model {
 		log_message("info", "Web-Model : Test_model_insert_debate_reply");
 		$this->db->insert('tb_debate_reply', $param);
 	}
+	function insert_board_reply($param){
+		log_message("info", "Web-Model : Test_model_insert_board_reply");
+		$this->db->insert('tb_board_reply', $param);
+	}
+
+	function get_bm_status($debate_id, $user_id){
+		$this->db->select('chg_st');
+    $query = $this->db->get_where('tb_bookmark', array('debate_id'=>$debate_id, 'user_id'=>$user_id));
+
+
+    $result = $query->row();
+
+    return $result;
+	}
+
+	function insert_book_mark($param){
+		log_message("info", "Web-Model : Admin_model_insert_book_mark");
+		$this->db->insert('tb_bookmark', $param);
+	}
+
+	function update_book_mark($param, $debate_id, $user_id){
+		log_message("info", "Web-Model : Admin_model_update_book_mark");
+		$this->db->update('tb_bookmark', $param, array('debate_id'=>$debate_id, 'user_id'=>$user_id));
+	}
 
 
 	function select_board_info($board_id){
@@ -176,6 +214,12 @@ class Admin_model extends CI_Model {
 		log_message("info", "Web-Model : Test_model_update_board_content");
 		$this->db->where('id', $board_id);
 		$this->db->update('tb_board', $param);
+	}
+
+	function update_debate_content($debate_id, $param){
+		log_message("info", "Web-Model : Test_model_update_debate_content");
+		$this->db->where('id', $debate_id);
+		$this->db->update('tb_debate', $param);
 	}
 
 	function update_user_info($user_id, $param){

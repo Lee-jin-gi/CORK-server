@@ -4,42 +4,57 @@
            <div class="row">
 
                <div class="col s12">
+                 <div class="divider"></div>
+<div class="section">
+  <h5><?php echo $debate_content -> title ?></h5>
+</div>
+<div class="divider"></div>
+  <div class="section">
+    <form id="bm_form" method="post" action="/admin/book_mark">
+      <input name="debate_id" type="hidden" value="<?= $debate_content -> id?>"/>
+      <input name="user_id" type="hidden" value="100"/>
+      <p style="text-align: right;"><input name="chg_st" type="checkbox" id="book_mark" <?php
+      if(isset($bm_status)){
+        if($bm_status -> chg_st == 1){
+          echo "checked";
+        }
+      }
+       ?>/><label for="book_mark">북마크</label></input></p>
+    </form>
+  <p class="date" style="text-align: right;"><?php echo $debate_content -> reg_date ?></p>
+  <p class="reg_id" style="text-align: right;"> <?php echo $debate_content -> reg_id ?></p>
 
-                 <div>
-                   <div style="display: inline-block; width: 80%;">
-                     <span class="title">
-                     <?php echo $debate_content -> title ?>
-                     </span>
-                   </div>
-                   <p class="date" style="display: inline-block"><?php echo $debate_content -> reg_date ?></p>
-                   <hr>
-                   <div>
-                     <p class="reg_id" style="text-align: right;"> <?php echo $debate_content -> reg_id ?></p>
-                     <div class="content">
-                       <?php echo $debate_content -> content ?>
-                     </div>
-                   </div>
-                 <hr>
+  <p><?php echo $debate_content -> content ?></p>
+</div>
+</div>
+
+</div>
+
+                 <div style="text-align: right;">
 
                    <a href="/admin/debate/edit?bid=<?php echo $debate_content -> id ?>">수정하기</a> | <a href="#" onclick="del_chk(<?php echo $debate_content -> id ?>);">삭제하기</a>
-                 </div>
-
-           </div>
-       </div>
-<hr>
+</div>
+<div class="divider"></div>
 <?php echo validation_errors(); ?>
-
+<div class="row">
 <form method="post" action="/admin/debate/reply?bid=<?= $debate_content->id?>" id="reply_form">
-
- <div class="input-field col s6">
-    <textarea id="input-content" class="validate" name="reply_content" form="reply_form" cols="40" rows="10" placeholder="댓글을 입력해 주세요." ></textarea>
-    <input id="input-id" name="user_id" type="number" class="validate" placeholder="user_id">
+  <div class="input-field col s2">
+             <input id="input-id" name="user_id" type="number" class="validate" placeholder="user_id">
   </div>
+          <div class="input-field col s8">
+             <textarea id="input-content" class="validate" name="reply_content" form="reply_form" cols="40" rows="10" placeholder="댓글을 입력해 주세요." ></textarea>
+           </div>
 
-<div><input type="submit" value="댓글 업로드" /></div>
 
+         <div class="input-field col s2">
+           <button class="btn waves-effect waves-light" type="submit" name="action">댓글 업로드
+               <i class="material-icons right">send</i>
+             </button>
+           </div>
 </form>
-<hr>
+
+</div>
+<div class="divider"></div>
 
 <?php if(count($reply_list) == 0){
   echo "<b>댓글 없음</b>";
@@ -77,7 +92,7 @@ $num = 1;
        </table>
 <?php } ?>
 <hr>
-
+</div>
    </main>
 
 
@@ -98,4 +113,15 @@ $num = 1;
        return false;
      }
    }
+
+   $(document).ready(function(){
+     $("#book_mark").change(function(){
+       if($("#book_mark").is(":checked")){
+         alert("북마크 등록");
+       }else{
+         alert("북마크 해제");
+       }
+      $('#bm_form').submit();
+     });
+   });
    </script>
