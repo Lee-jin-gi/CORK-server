@@ -1,5 +1,71 @@
 
    <main>
+
+     <?php
+    //  exit;
+
+
+     $std = "";
+     $count = "";
+    //  for($i=1; $i<=12; $i++){
+    //    $std .= "'" . $debate_count_per_month["m".$i] . "',";
+    //   //  $value .= "'" . $debate_count_per_month["m".$i] . "',";
+    //  }
+
+
+     foreach ($debate_count_per_month as $key => $value) {
+           $std .= "'" . $key . "',";
+           $count .= "'" . $value . "',";
+       }
+
+
+     $label =  substr($std, 0, -1);
+     $data = substr($count, 0, -1);
+     ?>
+
+     <canvas id="Debate_count_bar_chart" width="300px" height="100px"></canvas>
+          <script>
+          var ctx = document.getElementById("Debate_count_bar_chart").getContext('2d');
+          var board_count_bar_chart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: [<?= $label ?>],
+                datasets: [{
+                  label: "TEST",
+                  data: [<?= $data ?>],
+                  backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)',
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(153, 102, 255, 0.2)',
+                  'rgba(255, 159, 64, 0.2)'
+                   ],
+                   borderWidth: 1
+                }]
+              },
+              options: {
+                scales: {
+                  xAxes: [{
+                    gridLines: {
+                      offsetGridLines: true
+                    }
+                  }]
+                }
+              }
+          });
+
+           </script>
+
+
+
+
        <div class="container">
            <div class="row">
 
@@ -15,6 +81,10 @@
                <a href="/admin/debate/write" class="btn-floating btn-large waves-effect halfway-fab waves-light red"><i class="material-icons">mode_edit</i></a>
                </div>
              </nav>
+             <hr><br>
+                          <div style="text-align: right;">
+                           <a href="/admin/debate/download" class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>Download</a>
+                          </div>
                <br>
                      <table class="bordered centered highlight">
                          <thead>

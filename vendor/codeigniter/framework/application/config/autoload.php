@@ -66,7 +66,11 @@ $autoload['libraries'] = array(
     'user_agent',
     'form_validation',
     'pagination',
-    'calendar'
+    'calendar',
+    'excel',
+    'amazons3',
+    'curl',
+    'mailer'
 );
 
 /*
@@ -105,7 +109,8 @@ $autoload['helper'] = array(
     'html',
     'date',
     'security',
-    'cookie'
+    'cookie',
+    'mail_send_helper'
 );
 
 /*

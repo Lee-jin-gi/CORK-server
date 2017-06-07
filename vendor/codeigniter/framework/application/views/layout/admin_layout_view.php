@@ -50,10 +50,18 @@ ob_start("ob_gzhandler");
     <meta name="msapplication-TileImage" content="assets/favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
 
+    <meta name="google-signin-client_id" content="900317406119-cc7urgf44dhko94kfa51c6a6vje5eb8g.apps.googleusercontent.com">
+
+
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="<?=ASSETS_DIR?>/build/css/ghpages-materialize.css" rel="stylesheet">
     <link href="<?=ASSETS_DIR?>/css/style.css" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.9.1/d3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.12/c3.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.12/c3.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
 
 
  	  <title>App title</title>
@@ -66,6 +74,8 @@ ob_start("ob_gzhandler");
  		  ga('create', 'UA-77464118-1', 'auto');
  		  ga('send', 'pageview');
  		</script>
+
+
 
 
    </head>
@@ -102,6 +112,14 @@ ob_start("ob_gzhandler");
                <li><a href="/admin/user/list?type=all">전체 사용자 열람</a></li>
                <li><a href="/admin/user/list?type=sns">SNS 사용자 열람</a></li>
                <li><a href="/admin/user/list?type=email">일반 사용자 열람</a></li>
+
+             </ul>
+           </div>
+         </li>
+         <li class="bold"><a class="collapsible-header waves-effect waves-teal">로그인</a>
+           <div class="collapsible-body">
+             <ul>
+               <li><a href="/admin/join/sns">SNS 로그인 테스트</a></li>
 
              </ul>
            </div>

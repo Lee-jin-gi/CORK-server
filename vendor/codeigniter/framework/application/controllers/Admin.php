@@ -84,6 +84,32 @@ class Admin extends CI_Controller {
 		redirect ("/admin/debate/info?bid=$debate_id");
 	}
 
+	function join(){
+		$action = $this->uri->segment(3);
+
+		if($action == "sns"){
+			$this->join_sns();
+		}else if($action == "response"){
+			$app_id = $this->input->get("app_id");
+			$user_name = $this->input->get("name");
+
+			echo "app_id : " . $app_id . "\nuser_name : " . $user_name;
+			exit;
+
+		}else if($action == "naver"){
+			$access_token=$this->input->get("access_token");
+
+
+			echo "access_token : " + $access_token;
+			exit;
+		}
+
+
+		else{
+			show_404();
+		}
+	}
+
 
 	function board(){
 		$action = $this->uri->segment(3);
@@ -114,6 +140,8 @@ class Admin extends CI_Controller {
 		}else if($action == "reply"){
 			$code = 700;
 			$this->board_reply($this->input->get("bid"), $code);
+		}else if($action == "download"){
+			$this->board_download();
 		}
 
 		//list
@@ -157,6 +185,8 @@ class Admin extends CI_Controller {
 		}else if($action == "reply"){
 			$code = 750;
 			$this->debate_reply($this->input->get("bid"), $code);
+		}else if($action == "download"){
+			$this->debate_download();
 		}
 
 		else{
@@ -188,7 +218,10 @@ class Admin extends CI_Controller {
 		}else if($action == "reset"){
 			$code = 4;
 			$this->user_reset($this->input->get("bid"), $code);
+		}else if($action == "download"){
+			$this->user_download($type);
 		}
+
 
 		else{
 			show_404();
@@ -237,6 +270,10 @@ function user_list($type){
 
 	$limit = $config['per_page'];
 
+	$user_count_per_month = $this->Admin_model->get_user_count_per_month();
+	$data["user_count_per_month"] = $user_count_per_month;
+
+
 	$user_list = $this->Admin_model->select_user_list($start, $limit, $type);
 
 
@@ -244,6 +281,159 @@ function user_list($type){
 	$this->layout->setLayout("layout/admin_layout_view");
 	$this->layout->view('/admin/user_list_view', $data);
 }
+
+function join_sns(){
+	$this->layout->setLayout("layout/admin_layout_view");
+	$this->layout->view('/admin/sign_up_view');
+}
+
+
+	function board_download(){
+		$board_list = $this->Admin_model->select_board_list(0, 50);
+
+		$this->excel->setActiveSheetIndex(0);		// 워크시트에서 1번째는 활성화
+		$this->excel->getActiveSheet()->setTitle('report_board_list');		// 워크시트 이름 지정
+
+		$this->excel->getActiveSheet()->mergeCells('B2:F2');
+		$this->excel->getActiveSheet()->getStyle('B2:F3')->getFont()->setSize(16)->setBold(true);
+		$this->excel->getActiveSheet()->setCellValue('B2', "Board List" );
+		$this->excel->getActiveSheet()->setCellValue('B3', "Board No" );
+		$this->excel->getActiveSheet()->setCellValue('C3', 'Title');
+		$this->excel->getActiveSheet()->setCellValue('D3', 'Reply_count');
+		$this->excel->getActiveSheet()->setCellValue('E3', 'Reg_id');
+		$this->excel->getActiveSheet()->setCellValue('F3', 'Reg_date');
+		$index = 4;
+		$status = "";
+		foreach($board_list as $row){
+			$this->excel->getActiveSheet()->setCellValue('B'.$index, $row->id);
+			$this->excel->getActiveSheet()->setCellValue('C'.$index, $row->title);
+			$this->excel->getActiveSheet()->setCellValue('D'.$index, $row->reply_cnt);
+			$this->excel->getActiveSheet()->setCellValue('E'.$index, $row->reg_id);
+			$this->excel->getActiveSheet()->setCellValue('F'.$index, $row->reg_date);
+			$index ++;
+		}
+
+		// 컬럼 width auto
+		$this->excel->getActiveSheet()->getColumnDimensionByColumn("A")->setWidth('2');
+		foreach(range('B','Z') as $columnID) {
+			//$this->excel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+			$this->excel->getActiveSheet()->getColumnDimension($columnID)->setWidth('20');
+		}
+		$this->excel->getActiveSheet()->calculateColumnWidths();
+
+		$this->excel->setActiveSheetIndex(0);
+
+		$times = time();  // 현재 서버의 시간을 timestamp 값으로 가져옴
+		$date = date("ynjGis", $times);
+
+		$filename='Board_list_'.$date.'.xlsx'; // 엑셀 파일 이름
+		header("Content-Encoding: utf-8");
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf-8'); //mime 타입
+		header('Content-Disposition: attachment;filename="'.$filename.'"'); // 브라우저에서 받을 파일 이름
+		header('Cache-Control: max-age=0'); //no cache
+
+		$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
+		$objWriter->save('php://output');
+		exit;
+	}
+
+	function debate_download(){
+		$debate_list = $this->Admin_model->select_debate_list(0, 50);
+
+		$this->excel->setActiveSheetIndex(0);		// 워크시트에서 1번째는 활성화
+		$this->excel->getActiveSheet()->setTitle('report_debate_list');		// 워크시트 이름 지정
+
+		$this->excel->getActiveSheet()->mergeCells('B2:F2');
+		$this->excel->getActiveSheet()->getStyle('B2:F3')->getFont()->setSize(16)->setBold(true);
+		$this->excel->getActiveSheet()->setCellValue('B2', "Debate List" );
+		$this->excel->getActiveSheet()->setCellValue('B3', "Debate No" );
+		$this->excel->getActiveSheet()->setCellValue('C3', 'Title');
+		$this->excel->getActiveSheet()->setCellValue('D3', 'Reply_count');
+		$this->excel->getActiveSheet()->setCellValue('E3', 'Reg_id');
+		$this->excel->getActiveSheet()->setCellValue('F3', 'Reg_date');
+		$index = 4;
+		$status = "";
+		foreach($debate_list as $row){
+			$this->excel->getActiveSheet()->setCellValue('B'.$index, $row->id);
+			$this->excel->getActiveSheet()->setCellValue('C'.$index, $row->title);
+			$this->excel->getActiveSheet()->setCellValue('D'.$index, $row->reply_cnt);
+			$this->excel->getActiveSheet()->setCellValue('E'.$index, $row->reg_id);
+			$this->excel->getActiveSheet()->setCellValue('F'.$index, $row->reg_date);
+			$index ++;
+		}
+
+		// 컬럼 width auto
+		$this->excel->getActiveSheet()->getColumnDimensionByColumn("A")->setWidth('2');
+		foreach(range('B','Z') as $columnID) {
+			//$this->excel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+			$this->excel->getActiveSheet()->getColumnDimension($columnID)->setWidth('20');
+		}
+		$this->excel->getActiveSheet()->calculateColumnWidths();
+
+		$this->excel->setActiveSheetIndex(0);
+
+		$times = time();  // 현재 서버의 시간을 timestamp 값으로 가져옴
+		$date = date("ynjGis", $times);
+
+		$filename='Debate_list_'.$date.'.xlsx'; // 엑셀 파일 이름
+		header("Content-Encoding: utf-8");
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf-8'); //mime 타입
+		header('Content-Disposition: attachment;filename="'.$filename.'"'); // 브라우저에서 받을 파일 이름
+		header('Cache-Control: max-age=0'); //no cache
+
+		$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
+		$objWriter->save('php://output');
+		exit;
+	}
+
+	function user_download($type){
+		$user_list = $this->Admin_model->select_user_list(0, 50, $type);
+
+		$this->excel->setActiveSheetIndex(0);		// 워크시트에서 1번째는 활성화
+		$this->excel->getActiveSheet()->setTitle('report_user_list');		// 워크시트 이름 지정
+
+		$this->excel->getActiveSheet()->mergeCells('B2:E2');
+		$this->excel->getActiveSheet()->getStyle('B2:E3')->getFont()->setSize(16)->setBold(true);
+		$this->excel->getActiveSheet()->setCellValue('B2', "User List" );
+
+
+		$this->excel->getActiveSheet()->setCellValue('B3', "User id" );
+		$this->excel->getActiveSheet()->setCellValue('C3', 'Email');
+		$this->excel->getActiveSheet()->setCellValue('D3', 'Auth_code');
+		$this->excel->getActiveSheet()->setCellValue('E3', 'Reg_date');
+		$index = 4;
+		$status = "";
+		foreach($user_list as $row){
+			$this->excel->getActiveSheet()->setCellValue('B'.$index, $row->id);
+			$this->excel->getActiveSheet()->setCellValue('C'.$index, $row->email);
+			$this->excel->getActiveSheet()->setCellValue('D'.$index, $row->auth_code);
+			$this->excel->getActiveSheet()->setCellValue('E'.$index, $row->reg_date);
+			$index ++;
+		}
+
+		// 컬럼 width auto
+		$this->excel->getActiveSheet()->getColumnDimensionByColumn("A")->setWidth('2');
+		foreach(range('B','Z') as $columnID) {
+			//$this->excel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
+			$this->excel->getActiveSheet()->getColumnDimension($columnID)->setWidth('20');
+		}
+		$this->excel->getActiveSheet()->calculateColumnWidths();
+
+		$this->excel->setActiveSheetIndex(0);
+
+		$times = time();  // 현재 서버의 시간을 timestamp 값으로 가져옴
+		$date = date("ynjGis", $times);
+
+		$filename='User_list_'.$date.'.xlsx'; // 엑셀 파일 이름
+		header("Content-Encoding: utf-8");
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf-8'); //mime 타입
+		header('Content-Disposition: attachment;filename="'.$filename.'"'); // 브라우저에서 받을 파일 이름
+		header('Cache-Control: max-age=0'); //no cache
+
+		$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
+		$objWriter->save('php://output');
+		exit;
+	}
 
 	/**
 		전체 게시판
@@ -280,6 +470,11 @@ function user_list($type){
     }
 
     $limit = $config['per_page'];
+
+		$board_count_per_month = $this->Admin_model->get_board_count_per_month();
+		$data["board_count_per_month"] = $board_count_per_month;
+
+
 
     $board_list = $this->Admin_model->select_board_list($start, $limit);
     $data["board_list"] = $board_list;
@@ -318,6 +513,11 @@ function user_list($type){
     }
 
     $limit = $config['per_page'];
+
+
+
+				$debate_count_per_month = $this->Admin_model->get_debate_count_per_month();
+				$data["debate_count_per_month"] = $debate_count_per_month;
 
     $debate_list = $this->Admin_model->select_debate_list($start, $limit);
     $data["debate_list"] = $debate_list;
@@ -510,6 +710,10 @@ function user_list($type){
 			"upt_date" => date("Y-m-d H:i:s", time())
 		);
 
+		// $name = "Name = mail test", $email="dvmoomoodv@gmail.com", $title="Title - mail test", $content="Content - mail test"
+
+		$result = send($id, "jingil5068@gmail.com", "[Notice] Changed Account Info", "Your password was changed. Password : " . $hash_str);
+
 		$this->Admin_model->reset_user_password($id, $param);
 		$this->Admin_model->history_log($code, $id, $id);
 
@@ -552,7 +756,9 @@ function user_list($type){
 
 	public function user_update($id, $param, $code){
 		$this->Admin_model->update_user_info($id, $param);
-				$this->Admin_model->history_log($code, $id, 0);
+		$this->Admin_model->history_log($code, $id, 0);
+
+		$result = send($id, "jingil5068@gmail.com", "[Notice] Changed Account Info", "Updated your permissions. Please check it!");
 		$data["check"] = "user info update success";
 		//echo json_encode($data);
 

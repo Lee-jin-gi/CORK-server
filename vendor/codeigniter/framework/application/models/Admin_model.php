@@ -24,6 +24,109 @@ class Admin_model extends CI_Model {
 	// 	return $result;
 	// }
 
+	function get_debate_count_per_month(){
+		$sql = "
+		select
+				(select count(id) from tb_debate where DATE_FORMAT(reg_date, '%Y-%m') = '2017-01') as 'm1',
+				(select count(id) from tb_debate where DATE_FORMAT(reg_date, '%Y-%m') = '2017-02') as 'm2',
+				(select count(id) from tb_debate where DATE_FORMAT(reg_date, '%Y-%m') = '2017-03') as 'm3',
+				(select count(id) from tb_debate where DATE_FORMAT(reg_date, '%Y-%m') = '2017-04') as 'm4',
+				(select count(id) from tb_debate where DATE_FORMAT(reg_date, '%Y-%m') = '2017-05') as 'm5',
+				(select count(id) from tb_debate where DATE_FORMAT(reg_date, '%Y-%m') = '2017-06') as 'm6',
+				(select count(id) from tb_debate where DATE_FORMAT(reg_date, '%Y-%m') = '2017-07') as 'm7',
+				(select count(id) from tb_debate where DATE_FORMAT(reg_date, '%Y-%m') = '2017-08') as 'm8',
+				(select count(id) from tb_debate where DATE_FORMAT(reg_date, '%Y-%m') = '2017-09') as 'm9',
+				(select count(id) from tb_debate where DATE_FORMAT(reg_date, '%Y-%m') = '2017-10') as 'm10',
+				(select count(id) from tb_debate where DATE_FORMAT(reg_date, '%Y-%m') = '2017-11') as 'm11',
+				(select count(id) from tb_debate where DATE_FORMAT(reg_date, '%Y-%m') = '2017-12') as 'm12'
+				from dual;
+		";
+		$query = $this->db->query($sql);
+		$result = $query->row();
+
+
+		return $result;
+	}
+	function get_board_count_per_month(){
+
+		$this->db->select("a.month, ifnull(b.count, 0) count");
+		$this->db->from("(
+				select '2017-01' as month from dual
+				union all
+				select '2017-02' from dual
+				union all
+				select '2017-03' from dual
+				union all
+				select '2017-04' from dual
+				union all
+				select '2017-05' from dual
+				union all
+				select '2017-06' from dual
+				union all
+				select '2017-07' from dual
+				union all
+				select '2017-08' from dual
+				union all
+				select '2017-09' from dual
+				union all
+				select '2017-10' from dual
+				union all
+				select '2017-11' from dual
+				union all
+				select '2017-12' from dual
+				) as a"
+		);
+		$this->db->join("(
+				SELECT DATE_FORMAT(reg_date,'%Y-%m') month, COUNT(*) count FROM tb_board GROUP BY month having month > '2017-00' order by null)	as b", "a.month = b.month", "left outer");
+		$this->db->group_by("a.month");
+
+		$result = $this->db->get();
+
+
+
+		return $result->result();
+	}
+
+	function get_user_count_per_month(){
+
+		$this->db->select("a.month, ifnull(b.count, 0) count");
+		$this->db->from("(
+				select '2017-01' as month from dual
+				union all
+				select '2017-02' from dual
+				union all
+				select '2017-03' from dual
+				union all
+				select '2017-04' from dual
+				union all
+				select '2017-05' from dual
+				union all
+				select '2017-06' from dual
+				union all
+				select '2017-07' from dual
+				union all
+				select '2017-08' from dual
+				union all
+				select '2017-09' from dual
+				union all
+				select '2017-10' from dual
+				union all
+				select '2017-11' from dual
+				union all
+				select '2017-12' from dual
+				) as a"
+		);
+		$this->db->join("(
+				SELECT DATE_FORMAT(upt_date,'%Y-%m') month, COUNT(id) count FROM tb_user GROUP BY month having month > '2017-00' order by null)	as b", "a.month = b.month", "left outer");
+		$this->db->group_by("a.month");
+
+		$result = $this->db->get();
+
+
+
+		return $result->result();
+	}
+
   function get_board_content_count(){
     // $this->load->model('Welcome_model');
 
@@ -61,7 +164,7 @@ class Admin_model extends CI_Model {
 
   function select_board_list($offset = '', $limit = ''){
 
-		$this->db->select("b.id, b.title, (select count(*) from tb_board_reply br where b.id=br.board_id) reply_cnt, b.reg_id, b.reg_date", false);
+		$this->db->select("b.id, b.title, (select count(id) from tb_board_reply br where b.id=br.board_id) reply_cnt, b.reg_id, b.reg_date", false);
 		$this->db->from('tb_board b');
 		$this->db->order_by("b.id", "desc");
 		$this->db->where('del_st', !1);
