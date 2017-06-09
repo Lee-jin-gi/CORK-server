@@ -24,6 +24,10 @@ class Admin_model extends CI_Model {
 	// 	return $result;
 	// }
 
+/**
+		토론 게시판 월별 통계값 가져오는 쿼리
+		Pivot
+**/
 	function get_debate_count_per_month(){
 		$sql = "
 		select
@@ -128,7 +132,6 @@ class Admin_model extends CI_Model {
 	}
 
   function get_board_content_count(){
-    // $this->load->model('Welcome_model');
 
     $this->db->from('tb_board');
     $this->db->where('del_st', !1);
@@ -196,8 +199,6 @@ class Admin_model extends CI_Model {
     $limit_query = '';
 
     if ($limit != '' OR $offset != '') {
-        // 페이징이 있을 경우 처리
-        // $limit_query = ' LIMIT ' . $offset . ', ' . $limit;
         $this->db->limit($limit, $offset);
     }else{
       $this->db->limit(20);
@@ -219,12 +220,13 @@ class Admin_model extends CI_Model {
 	 $limit_query = '';
 
 	 if ($limit != '' OR $offset != '') {
-	 		// 페이징이 있을 경우 처리
-	 		// $limit_query = ' LIMIT ' . $offset . ', ' . $limit;
 	 		$this->db->limit($limit, $offset);
 	 }else{
 	 	$this->db->limit(20);
 	 }
+
+	 // 타입이 sns일 꼉우 auth_code가 sns_xxxxxxxxxxxxx
+	 // Admin - user_reset($id, $code) 함수에서 초기화 하면 sns_xxxxxx에서 sns_ 사라짐.
 	 if($type == 'sns'){
 		 $this->db->like('auth_code', $type);
 	 }else if($type == 'email'){
@@ -275,7 +277,12 @@ class Admin_model extends CI_Model {
 		log_message("info", "Web-Model : Test_model_insert_board_reply");
 		$this->db->insert('tb_board_reply', $param);
 	}
+	function insert_sns_info($param){
+		log_message("info", "Web-Model : Admin_model_insert_sns_info");
+		$this->db->insert('tb_user_sns', $param);
+	}
 
+	// get_bookmark_status
 	function get_bm_status($debate_id, $user_id){
 		$this->db->select('chg_st');
     $query = $this->db->get_where('tb_bookmark', array('debate_id'=>$debate_id, 'user_id'=>$user_id));
@@ -284,6 +291,17 @@ class Admin_model extends CI_Model {
     $result = $query->row();
 
     return $result;
+	}
+
+/**
+	SNS 등록 이력있는지 확인하는 쿼리
+**/
+	function get_sns_status($app_id, $sns){
+		$this->db->select('id, sns_code, sns_token, tb_user_id, reg_date');
+		$query = $this->db->get_where('tb_user_sns', array('sns_code'=>$sns, 'sns_token'=>$app_id));
+
+		$result = $query->row();
+		return $result;
 	}
 
 	function insert_book_mark($param){
@@ -357,6 +375,9 @@ class Admin_model extends CI_Model {
 		$this->db->update('tb_user', $param);
 	}
 
+/**
+	Issue Code별 로그 남기는 쿼리
+**/
 	function history_log($code, $id, $reg_id){
 		$param = array(
 			"code" => $code,

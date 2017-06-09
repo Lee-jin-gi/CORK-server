@@ -46,8 +46,6 @@ class Expert_model extends CI_Model {
     $limit_query = '';
 
     if ($limit != '' OR $offset != '') {
-        // 페이징이 있을 경우 처리
-        // $limit_query = ' LIMIT ' . $offset . ', ' . $limit;
         $this->db->limit($limit, $offset);
     }else{
       $this->db->limit(20);

@@ -8,7 +8,7 @@
  fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
 
-<!-- get Login Info -->
+<!-- 페이스북 로그인 Script -->
 <script>
 function checkLoginState() {
   FB.getLoginStatus(function(response) {
@@ -24,15 +24,14 @@ function logout(){
  });
 }
 
+// 페이스북 로그인 콜백함수
 function statusChangeCallback(response) {
   console.log('statusChangeCallback');
   console.log(response);
   if (response.status === 'connected') { // 페이스북을 통해서 로그인이 되어있다.
     console.log("Token : "+response.authResponse.accessToken);
-    // testAPI();
-
     FB.api('/me', function(response){
-        location.href = "/admin/join/response?app_id="+response.id+"&name="+response.name;
+        location.href = "/admin/join/response?app_id="+response.id+"&name="+response.name+"&sns=fb";
     });
 
   } else if (response.status === 'not_authorized') { // 페이스북에는 로그인 했으나, 앱에는 로그인이 되어있지 않다.
@@ -68,6 +67,7 @@ function statusChangeCallback(response) {
 
 
                 <br><hr><br>
+                <!-- 카카오 로그인. 스크립트가 위로가면 인식 X -->
                 <a id="kakao-login-btn"></a>
                 <script type='text/javascript'>
                   //<![CDATA[
@@ -84,7 +84,7 @@ function statusChangeCallback(response) {
                           success: function(suc){
 
                             // alert("ID : "+suc.id + "\nEmail : " + suc.kaccount_email);
-                            location.href = "/admin/join/response?app_id="+suc.id+"&name="+suc.kaccount_email;
+                            location.href = "/admin/join/response?app_id="+suc.id+"&name="+suc.kaccount_email+"&sns=kakao";
                           },
                           fail: function(err){
                             alert("TEST");
@@ -100,8 +100,7 @@ function statusChangeCallback(response) {
 
                 </script>
                 <br><hr><br>
-                <!-- <div class="g-signin2" data-width="300" data-height="200" data-longtitle="true"> -->
-                  <!-- <div id="my-signin2"></div> -->
+                <!-- 구글에 로그인 되어있을 경우 data-onsuccess로 자동 이동-->
                   <div class="g-signin2"
                     data-scope="https://www.googleapis.com/auth/plus.login"
                     data-clientid="900317406119-cc7urgf44dhko94kfa51c6a6vje5eb8g"
@@ -112,9 +111,7 @@ function statusChangeCallback(response) {
                     <script>
 
                       function onSignIn(googleUser) {
-                        // console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
-                        // console.log('response : ' + googleUser.El);
-                        location.href = "/admin/join/response?app_id="+googleUser.El+"&name="+googleUser.getBasicProfile().getName();
+                        location.href = "/admin/join/response?app_id="+googleUser.El+"&name="+googleUser.getBasicProfile().getName()+"&sns=google";
                       }
                       function onSignInFailure(error) {
                         console.log(error);

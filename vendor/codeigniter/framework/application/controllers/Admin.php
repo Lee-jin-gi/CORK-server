@@ -24,6 +24,18 @@ class Admin extends CI_Controller {
 		echo "test";
 	}
 
+/**
+*
+	@function	: book_mark
+						-	북마크 관련 함수
+	@var status : 북마크 - DB에 등록 되어있는지 확인하는 변수
+						0 = 처음 등록하는 경우
+						!0 = 이미 등록된 이력이 있는 경우
+	@var chg_st	: 북마크 상태 변수
+						on = 북마크 등록
+						!on = 북마크 등록 취소
+*
+**/
 	function book_mark(){
 		$chg_st = $this->input->post("chg_st");
 		$debate_id = $this->input->post("debate_id");
@@ -58,6 +70,13 @@ class Admin extends CI_Controller {
 		}
 	}
 
+/**
+*
+	@function : get_bm_status
+						- DB에 북마크 등록 이력이 있는지 확인하는 함수
+						bm = bookmark
+*
+**/
 	function get_bm_status($debate_id, $user_id){
 
 		$bm_status = $this->Admin_model->get_bm_status($debate_id, $user_id);
@@ -74,16 +93,24 @@ class Admin extends CI_Controller {
 		}
 	}
 
+
 	function insert_book_mark($debate_id, $param){
 		$this->Admin_model->insert_book_mark($param);
 		redirect ("/admin/debate/info?bid=$debate_id");
 	}
+
 
 	function update_book_mark($param, $debate_id, $user_id){
 		$this->Admin_model->update_book_mark($param, $debate_id, $user_id);
 		redirect ("/admin/debate/info?bid=$debate_id");
 	}
 
+	/**
+	*
+		@function : join()
+							- 회원 관리 관련 함수
+	*
+	**/
 	function join(){
 		$action = $this->uri->segment(3);
 
@@ -92,23 +119,49 @@ class Admin extends CI_Controller {
 		}else if($action == "response"){
 			$app_id = $this->input->get("app_id");
 			$user_name = $this->input->get("name");
+			$sns = $this->input->get("sns");
 
-			echo "app_id : " . $app_id . "\nuser_name : " . $user_name;
-			exit;
+			$this->user_sns_insert($app_id, $sns);
 
-		}else if($action == "naver"){
-			$access_token=$this->input->get("access_token");
-
-
-			echo "access_token : " + $access_token;
-			exit;
 		}
-
-
 		else{
 			show_404();
 		}
 	}
+
+	/**
+	*
+	@function : user_sns_insert
+							- SNS 로그인 후 해당 정보 불러오는 함수
+	*
+	**/
+	function user_sns_insert($app_id, $sns){
+		$user_sns_status = $this->Admin_model->get_sns_status($app_id, $sns);
+
+		if(isset($user_sns_status)){
+			echo "ID 존재<br>";
+			echo "User ID : $user_sns_status->tb_user_id<br>SNS : $user_sns_status->sns_code<br>App_ID : $user_sns_status->sns_token<br>Reg_Date : $user_sns_status->reg_date";
+		}else{
+			echo "ID 존재 x";
+			// 이 경우 insert 해주면 됨
+			$param = array(
+				'sns_code' => $sns,
+				'sns_token' => $app_id,
+				'tb_user_id' => 100,
+				'reg_id' => 100,
+				'reg_date' => date("Y-m-d H:i:s", time())
+			);
+			$this->Admin_model->insert_sns_info($param);
+		}
+
+	}
+
+
+	function join_sns(){
+		$this->layout->setLayout("layout/admin_layout_view");
+		$this->layout->view('/admin/sign_up_view');
+	}
+
 
 
 	function board(){
@@ -229,12 +282,15 @@ class Admin extends CI_Controller {
 	}
 
 function user_list($type){
+	// 페이징 관련 설정
 	$config['page_query_string'] = TRUE;
 	$config['base_url'] = "/admin/user/list?type=$type";
 	$config['total_rows'] = $this->Admin_model->get_user_count($type);
 	$config['per_page'] = 50;
 	$config['uri_segment'] = 4;
 	$config['num_links'] = 3;
+
+	// 페이징 태그 커스터마이징
 	$config['prev_tag_open'] = "<li class='waves-effect'><i class='material-icons'>";
 	$config['prev_tag_close'] = "</i></li>";
 	$config['next_tag_open'] = "<li class='waves-effect'><i class='material-icons'>";
@@ -248,10 +304,6 @@ function user_list($type){
 
 	$this->pagination->initialize($config);
 	$data['pagination'] = $this -> pagination -> create_links();
-	// $data['pagination']  = str_replace("\" data-ci", "type=$type \" data-ci", $data['pagination']);
-
-	// ECHO $data['pagination'];
-	// exit;
 
 
 
@@ -282,12 +334,12 @@ function user_list($type){
 	$this->layout->view('/admin/user_list_view', $data);
 }
 
-function join_sns(){
-	$this->layout->setLayout("layout/admin_layout_view");
-	$this->layout->view('/admin/sign_up_view');
-}
 
-
+	/**
+	*
+		각 카테고리 Excel로 다운로드 하는 함수
+	*
+	**/
 	function board_download(){
 		$board_list = $this->Admin_model->select_board_list(0, 50);
 
@@ -340,8 +392,8 @@ function join_sns(){
 	function debate_download(){
 		$debate_list = $this->Admin_model->select_debate_list(0, 50);
 
-		$this->excel->setActiveSheetIndex(0);		// 워크시트에서 1번째는 활성화
-		$this->excel->getActiveSheet()->setTitle('report_debate_list');		// 워크시트 이름 지정
+		$this->excel->setActiveSheetIndex(0);
+		$this->excel->getActiveSheet()->setTitle('report_debate_list');
 
 		$this->excel->getActiveSheet()->mergeCells('B2:F2');
 		$this->excel->getActiveSheet()->getStyle('B2:F3')->getFont()->setSize(16)->setBold(true);
@@ -362,24 +414,22 @@ function join_sns(){
 			$index ++;
 		}
 
-		// 컬럼 width auto
 		$this->excel->getActiveSheet()->getColumnDimensionByColumn("A")->setWidth('2');
 		foreach(range('B','Z') as $columnID) {
-			//$this->excel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
 			$this->excel->getActiveSheet()->getColumnDimension($columnID)->setWidth('20');
 		}
 		$this->excel->getActiveSheet()->calculateColumnWidths();
 
 		$this->excel->setActiveSheetIndex(0);
 
-		$times = time();  // 현재 서버의 시간을 timestamp 값으로 가져옴
+		$times = time();
 		$date = date("ynjGis", $times);
 
-		$filename='Debate_list_'.$date.'.xlsx'; // 엑셀 파일 이름
+		$filename='Debate_list_'.$date.'.xlsx';
 		header("Content-Encoding: utf-8");
-		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf-8'); //mime 타입
-		header('Content-Disposition: attachment;filename="'.$filename.'"'); // 브라우저에서 받을 파일 이름
-		header('Cache-Control: max-age=0'); //no cache
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf-8');
+		header('Content-Disposition: attachment;filename="'.$filename.'"');
+		header('Cache-Control: max-age=0');
 
 		$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
 		$objWriter->save('php://output');
@@ -389,8 +439,8 @@ function join_sns(){
 	function user_download($type){
 		$user_list = $this->Admin_model->select_user_list(0, 50, $type);
 
-		$this->excel->setActiveSheetIndex(0);		// 워크시트에서 1번째는 활성화
-		$this->excel->getActiveSheet()->setTitle('report_user_list');		// 워크시트 이름 지정
+		$this->excel->setActiveSheetIndex(0);
+		$this->excel->getActiveSheet()->setTitle('report_user_list');
 
 		$this->excel->getActiveSheet()->mergeCells('B2:E2');
 		$this->excel->getActiveSheet()->getStyle('B2:E3')->getFont()->setSize(16)->setBold(true);
@@ -411,24 +461,22 @@ function join_sns(){
 			$index ++;
 		}
 
-		// 컬럼 width auto
 		$this->excel->getActiveSheet()->getColumnDimensionByColumn("A")->setWidth('2');
 		foreach(range('B','Z') as $columnID) {
-			//$this->excel->getActiveSheet()->getColumnDimension($columnID)->setAutoSize(true);
 			$this->excel->getActiveSheet()->getColumnDimension($columnID)->setWidth('20');
 		}
 		$this->excel->getActiveSheet()->calculateColumnWidths();
 
 		$this->excel->setActiveSheetIndex(0);
 
-		$times = time();  // 현재 서버의 시간을 timestamp 값으로 가져옴
+		$times = time();
 		$date = date("ynjGis", $times);
 
-		$filename='User_list_'.$date.'.xlsx'; // 엑셀 파일 이름
+		$filename='User_list_'.$date.'.xlsx';
 		header("Content-Encoding: utf-8");
-		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf-8'); //mime 타입
-		header('Content-Disposition: attachment;filename="'.$filename.'"'); // 브라우저에서 받을 파일 이름
-		header('Cache-Control: max-age=0'); //no cache
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf-8');
+		header('Content-Disposition: attachment;filename="'.$filename.'"');
+		header('Cache-Control: max-age=0');
 
 		$objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
 		$objWriter->save('php://output');
@@ -436,8 +484,8 @@ function join_sns(){
 	}
 
 	/**
-		전체 게시판
-	*/
+		게시판 목록
+	**/
 	function board_list(){
 		$config['base_url'] = '/admin/board/list/page';
     $config['total_rows'] = $this->Admin_model->get_board_content_count();
@@ -700,6 +748,11 @@ function join_sns(){
 		$this->layout->view('/admin/debate_edit_view', $data);
 	}
 
+/**
+			유저 Password 초기화 함수
+			sha512 알고리즘 사용
+			개인정보 변경 후 e-mail로 고지(Mailer 이용)
+**/
 	public function user_reset($id, $code){
 		$str = "pass1234!@#$";
 		$hash_str = hash("sha512", $str);
@@ -754,6 +807,10 @@ function join_sns(){
 		redirect('/admin/debate/list');
 	}
 
+/**
+		유저 정보(권한) 변경하는 함수
+		변경 후 Email로 고지
+**/
 	public function user_update($id, $param, $code){
 		$this->Admin_model->update_user_info($id, $param);
 		$this->Admin_model->history_log($code, $id, 0);

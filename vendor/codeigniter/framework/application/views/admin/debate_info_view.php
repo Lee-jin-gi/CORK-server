@@ -13,6 +13,8 @@
     <form id="bm_form" method="post" action="/admin/book_mark">
       <input name="debate_id" type="hidden" value="<?= $debate_content -> id?>"/>
       <input name="user_id" type="hidden" value="100"/>
+
+      <!-- 북마크 상태 받아와서 체크해주는 부분 -->
       <p style="text-align: right;"><input name="chg_st" type="checkbox" id="book_mark" <?php
       if(isset($bm_status)){
         if($bm_status -> chg_st == 1){
