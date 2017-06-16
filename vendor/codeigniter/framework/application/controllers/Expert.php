@@ -6,6 +6,7 @@ class Expert extends CI_Controller {
 	function __construct() {
 		parent::__construct ();
 
+		// Expert, Manager, Admin 
 		$allow_ip =
 		array(
 				"127.0.0.1", "0:0:0:0:0:0:0:1", "::1"

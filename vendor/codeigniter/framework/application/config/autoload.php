@@ -66,7 +66,8 @@ $autoload['libraries'] = array(
     'user_agent',
     'form_validation',
     'pagination',
-    'calendar'
+    'calendar',
+    'unit_test'
 );
 
 /*
@@ -105,7 +106,8 @@ $autoload['helper'] = array(
     'html',
     'date',
     'security',
-    'cookie'
+    'cookie',
+    'gitter_helper'
 );
 
 /*
