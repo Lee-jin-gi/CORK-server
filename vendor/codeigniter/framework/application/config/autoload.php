@@ -154,4 +154,5 @@ $autoload['language'] = array();
 $autoload['model'] = array(
   'Test_model'
   , 'Admin_model'
+  , 'Expert_model'
 );

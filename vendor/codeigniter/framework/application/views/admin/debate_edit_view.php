@@ -5,15 +5,15 @@
 
                <div class="col s12">
 
-                <form method="post" action="/admin/board/update?bid=<?=$board_content->id?>">
+                <form method="post" action="/admin/debate/update?bid=<?=$debate_content->id?>">
                  <h5>Title</h5>
-                 <input type="text" name="board_title" value="<?php echo $board_content -> title ?>" size="50" />
+                 <input type="text" name="debate_title" value="<?php echo $debate_content -> title ?>" size="50" />
 
                  <h5>Content</h5>
-                 <input type="text" name="board_content" value="<?php echo $board_content -> content ?>" size="100" />
+                 <input type="text" name="debate_content" value="<?php echo $debate_content -> content ?>" size="100" />
 
                  <h5>User ID</h5>
-                 <input type="text" placeholder="1" name="user_id" value="<?php echo $board_content -> reg_id ?>" size="10" />
+                 <input type="text" placeholder="1" name="user_id" value="<?php echo $debate_content -> reg_id ?>" size="10" />
 
                  <div class="input-field col s2">
                    <button class="btn waves-effect waves-light" type="submit" name="action">Edit

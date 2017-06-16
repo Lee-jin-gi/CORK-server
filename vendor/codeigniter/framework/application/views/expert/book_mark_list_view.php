@@ -5,14 +5,14 @@
 
                <div class="col s12">
 
-                 <article id="board_area">
+                 <article id="book_mark_area">
                      <header>
                          <h1></h1>
                      </header>
                      <nav class="nav-extended">
                      <div class="nav-content">
-      <span class="nav-title">일반 게시판</span>
-            <a href="/admin/board/write" class="btn-floating btn-large waves-effect halfway-fab waves-light red"><i class="material-icons">mode_edit</i></a>
+      <span class="nav-title">북마크</span>
+
     </div>
   </nav>
                <!-- <div style="text-align: right;">
@@ -23,25 +23,25 @@
                          <thead>
                              <tr>
                                  <th scope="col">번호</th>
-                                 <th scope="col">제목</th>
-                                 <th scope="col">댓글갯수</th>
-                                 <th scope="col">작성자</th>
-                                 <th scope="col">작성일</th>
+                                 <th scope="col">토론 번호</th>
+                                 <th scope="col">토론 제목</th>
+                                 <th scope="col">등록일</th>
                              </tr>
                          </thead>
                          <tbody>
                              <?php
-                 foreach($board_list as $lt)
+                             $book_mark_id = 1;
+                 foreach($book_mark_list as $lt)
                  {
+
                             ?>
                              <tr>
-                                 <td scope="row" class="centered"><?php echo $lt -> id;?></td>
-                                 <td><a href="/admin/board/info?bid=<?=$lt->id?>"> <?php echo $lt -> title;?> </a></td>
-                                 <td scope="row"><?php echo $lt -> reply_cnt;?></td>
-                                 <td><?php echo $lt -> reg_id;?></td>
+                                 <td scope="row" class="centered"><?php echo $book_mark_id++ ?></td>
+                                 <td scope="row"><?php echo $lt -> debate_id;?></td>
+                                 <td><a href="/admin/debate/info?bid=<?=$lt->debate_id?>"> <?php echo $lt -> title;?> </a></td>
                                  <td>
-                                 <time datetime="<?php echo mdate("%Y년 %m월 %j일", human_to_unix($lt -> reg_date)); ?>">
-                                     <?php echo mdate("%Y년 %m월 %j일", human_to_unix($lt -> reg_date));?>
+                                 <time datetime="<?php echo mdate("%Y년 %m월 %j일", human_to_unix($lt -> chg_date)); ?>">
+                                     <?php echo mdate("%Y년 %m월 %j일", human_to_unix($lt -> chg_date));?>
                                  </time></td>
                              </tr>
                              <?php

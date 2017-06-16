@@ -25,7 +25,12 @@
                 <input type="date" name="expire_date" class="datepicker" placeholder="calendar" value="<?= $user_info->expire_date?>">
 
 
-                 <div><hr><input onclick="edit_chk();" type="submit" value="Update" /></div>
+                 <!-- <div><hr><input onclick="edit_chk();" type="submit" value="Update" /></div> -->
+                 <div class="input-field col s2">
+                   <button onclick="edit_chk();" class="btn waves-effect waves-light" type="submit" name="action">Update
+                       <i class="material-icons right">send</i>
+                     </button>
+                   </div>
 
 
                  </form>

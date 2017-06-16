@@ -9,11 +9,14 @@
                      <header>
                          <h1></h1>
                      </header>
-               <div style="width: 450px; text-align: right;">
-               <a href="/admin/debate/write" class="waves-effect waves-light btn">추가하기</a>
+                     <nav class="nav-extended">
+                     <div class="nav-content">
+                       <span class="nav-title">토론 게시판</span>
+               <a href="/admin/debate/write" class="btn-floating btn-large waves-effect halfway-fab waves-light red"><i class="material-icons">mode_edit</i></a>
                </div>
+             </nav>
                <br>
-                     <table class="striped">
+                     <table class="bordered centered highlight">
                          <thead>
                              <tr>
                                  <th scope="col">번호</th>
@@ -24,14 +27,15 @@
                              </tr>
                          </thead>
                          <tbody>
+
                              <?php
                  foreach($debate_list as $lt)
                  {
                             ?>
                              <tr>
-                                 <th scope="row"><?php echo $lt -> id;?></th>
+                                 <td scope="row"><?php echo $lt -> id;?></td>
                                  <td><a href="/admin/debate/info?bid=<?=$lt->id?>"> <?php echo $lt -> title;?> </a></td>
-                                 <th scope="row"><?php echo $lt -> reply_cnt;?></th>
+                                 <td scope="row"><?php echo $lt -> reply_cnt;?></td>
                                  <td><?php echo $lt -> reg_id;?></td>
                                  <td>
                                  <time datetime="<?php echo mdate("%Y년 %m월 %j일", human_to_unix($lt -> reg_date)); ?>">
@@ -41,14 +45,13 @@
                              <?php
                              }
                             ?>
-                         </tbody>
 
-                         <tfoot>
-                           <tr>
-                               <th colspan="5"><?php echo $pagination;?></th>
-                           </tr>
-                       </tfoot>
+                         </tbody>
                      </table>
+                     <hr>
+                     <div style="text-align : center;">
+                            <ul class="pagination"><?php echo $pagination;?></ul>
+                          </div>
                  </article>
 
            </div>
