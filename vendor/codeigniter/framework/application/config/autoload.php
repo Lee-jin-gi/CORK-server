@@ -71,6 +71,7 @@ $autoload['libraries'] = array(
     'amazons3',
     'curl',
     'mailer'
+    'unit_test'
 );
 
 /*
@@ -111,6 +112,7 @@ $autoload['helper'] = array(
     'security',
     'cookie',
     'mail_send_helper'
+    'gitter_helper'
 );
 
 /*

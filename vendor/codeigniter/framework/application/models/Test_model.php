@@ -17,7 +17,7 @@ class Test_model extends CI_Model {
 	function select_test(){
 		log_message("info", "Web-Model : Test_model select_test");
 		$sql = "
-      SELECT 1 FROM dual
+      select user_id from tb_user_info limit 0,100
     ";
 		$query = $this->db->query($sql);
 		$result = $query->result();
